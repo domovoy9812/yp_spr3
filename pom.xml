@@ -10,13 +10,12 @@
   <packaging>war</packaging>
 
   <name>bliushtein_sprint3 Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+    <tomcat.target>F:\programs\apache-tomcat-10.1.39\webapps\${artifactId}</tomcat.target>
   </properties>
 
   <dependencies>
@@ -58,7 +57,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.6.0</version> <!-- Use the latest version available -->
+      <version>42.7.5</version>
     </dependency>
   </dependencies>
 
@@ -97,5 +96,14 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webappDirectory>${tomcat.target}</webappDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
