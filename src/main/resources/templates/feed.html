@@ -1,1 +1,84 @@
-<h2>Hello, world!</h2>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Витрина товаров</title>
+</head>
+
+<body>
+    <!-- Вместо action ссылка на страницу добавления поста -->
+    <form method="GET" action="...">
+        <button style="float:right;">ДОБАВИТЬ ПОСТ</button>
+    </form>
+    <table style="width:50%;margin-left:auto;margin-right:auto;">
+        <tr>
+            <td>
+                <form>
+                    <p>
+                        <label for="search">Найти по тегу: </label>
+                        <!-- В value значение со строкой поиска поста, если ничего не ищем, то пустая строка -->
+                        <input id="search" style="width:300px;" name="search" th:value="...">
+                        <button name="action">&#128269;</button>
+                    </p>
+                    <p>
+                        <label for="pageSize">Число постов: </label>
+                        <!-- В selected true, если выбран соответствующий пункт -->
+                        <select id="pageSize" name="pageSize" onchange="this.form.submit()">
+                            <option value="5" th:selected="...">5</option>
+                            <option value="10" th:selected="...">10</option>
+                            <option value="20" th:selected="...">20</option>
+                            <option value="50" th:selected="...">50</option>
+                            <option value="100" th:selected="...">100</option>
+                        </select>
+                    </p>
+                    <p>
+                    	<!-- 
+                    		В if true, если выбрана не первая страница.
+                    		В value номер предыдущей страницы.
+                    	-->
+                        <button th:if="..." name="pageNumber" th:value="...">&lt;</button>
+                        <!-- В text номер текущей страницы -->
+                        <span th:text="..."></span>
+                        <!-- 
+                    		В if true, если выбрана не последняя страница.
+                    		В value номер следующей страницы.
+                    	-->
+                        <button th:if="..." name="pageNumber" th:value="...">&gt;</button>
+                    </p>
+                </form>
+            </td>
+        </tr>
+        <!-- В each итерируемся по списку постов -->
+        <tr th:each="post : ${posts}">
+            <td style="border-bottom:thin solid;">
+            	<!-- В text название поста -->
+                <h2 th:text="${post.name}"></h2>
+                <p>
+                    <!-- В href ссылка на страницу с постом -->
+                    <a th:href="@{/post/{id}(id=${post.id})}">asdfasd
+                    	<!-- В src ссылка на картинку в посте -->
+                        <!--img height="300" th:src="..."-->
+                    </a>
+                </p>
+                <!-- В text первый абзац поста -->
+                <p th:text="${post.text}"></p>
+                <p>
+                    <!-- В text число лайков поста -->
+                    <span th:text="${post.likesCount}"></span>
+                    <!-- В text число комментариев поста -->
+                    <span th:text="0"></span>
+                </p>
+                <p>
+                    <span th:text="${post.createdWhen}"></span>
+                </p>
+                <p>
+                    <!-- 
+            		В each итерируемся по тегам поста
+            		В text выводим название тега поста
+            	    -->
+                    <!--span th:each="..." th:text="..."></span-->
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>

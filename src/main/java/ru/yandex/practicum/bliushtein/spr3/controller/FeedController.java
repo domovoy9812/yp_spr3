@@ -20,10 +20,9 @@ public class FeedController {
     }
 
     @GetMapping
-    public String users(Model model) {
+    public String feed(Model model) {
         List<Post> posts = service.findAll();
         model.addAttribute("posts", posts);
-
         return "feed";
     }
 

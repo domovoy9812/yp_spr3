@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Витрина товаров</title>
+</head>
+
+<body>
+<!-- Вместо href ссылка на ленту постов -->
+<a href="..." style="float:right;">
+    <b>НА ГЛАВНУЮ &cudarrr;</b>
+</a>
+<!-- Вместо action ссылка на форму добавления или редактирования поста -->
+<form method="POST" th:action="..." enctype="multipart/form-data">
+    <table style="width:50%;margin-left:auto;margin-right:auto;">
+        <tr>
+            <td>
+                <h3>Название</h3>
+                <!-- Вместо text название поста для формы редактирования или пустая строка для формы добавления -->
+                <textarea rows="2" style="width: 100%;" name="title" th:text="..."></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Изображение</h3>
+                <input type="file" name="image">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Теги</h3>
+                <!-- Вместо text строка с тегами поста для формы редактирования или пустая строка для формы добавления -->
+                <textarea rows="2" style="width: 100%;" name="tags" th:text="..."></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>Текст</h3>
+                <!-- Вместо text текст поста для формы редактирования или пустая строка для формы добавления -->
+                <textarea rows="30" style="width: 100%;" name="text" th:text="..."></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            	<!-- Вместо text 'Редактировать' для формы редактирования или 'Сохранить' для формы добавления -->
+                <button style="float:right;" th:text="..."></button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>

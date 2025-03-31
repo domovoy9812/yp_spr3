@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.bliushtein.spr3.model.Post;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -24,9 +25,10 @@ public class JdbcNativePostRepository implements PostRepository {
                 (rs, rowNum) -> new Post(
                         rs.getObject("id", UUID.class),
                         rs.getString("name"),
-                        rs.getString("text"),
-                        ZonedDateTime.from(rs.getDate("createdWhen").toInstant()),
-                        rs.getObject("owner", UUID.class)
+                        rs.getString("full_text"),
+                        ZonedDateTime.ofInstant(rs.getTimestamp("created_when").toInstant(),
+                                ZoneId.systemDefault()),
+                        rs.getInt("likes")
                 ));
     }
 }
