@@ -48,35 +48,23 @@
                 </form>
             </td>
         </tr>
-        <!-- В each итерируемся по списку постов -->
         <tr th:each="post : ${posts}">
             <td style="border-bottom:thin solid;">
-            	<!-- В text название поста -->
-                <h2 th:text="${post.name}"></h2>
                 <p>
-                    <!-- В href ссылка на страницу с постом -->
-                    <a th:href="@{/post/{id}(id=${post.id})}">asdfasd
-                    	<!-- В src ссылка на картинку в посте -->
-                        <!--img height="300" th:src="..."-->
+                    <a th:href="@{/post/{id}(id=${post.id})}">
+                        <h2 th:text="${post.name}"></h2>
                     </a>
                 </p>
-                <!-- В text первый абзац поста -->
-                <p th:text="${post.text}"></p>
+                <p th:text="${post.shortText}"></p>
                 <p>
-                    <!-- В text число лайков поста -->
                     <span th:text="${post.likesCount}"></span>
-                    <!-- В text число комментариев поста -->
-                    <span th:text="0"></span>
+                    <span th:text="${post.commentsCount}"></span>
                 </p>
                 <p>
                     <span th:text="${post.createdWhen}"></span>
                 </p>
                 <p>
-                    <!-- 
-            		В each итерируемся по тегам поста
-            		В text выводим название тега поста
-            	    -->
-                    <!--span th:each="..." th:text="..."></span-->
+                    <span th:each="tag : ${post.tags}" th:text="${tag}"></span>
                 </p>
             </td>
         </tr>

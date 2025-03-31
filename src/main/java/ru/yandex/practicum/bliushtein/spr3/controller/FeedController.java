@@ -3,8 +3,8 @@ package ru.yandex.practicum.bliushtein.spr3.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.bliushtein.spr3.model.Post;
-import ru.yandex.practicum.bliushtein.spr3.service.PostService;
+import ru.yandex.practicum.bliushtein.spr3.core.service.PostService;
+import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostSummary;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class FeedController {
 
     @GetMapping
     public String feed(Model model) {
-        List<Post> posts = service.findAll();
+        List<PostSummary> posts = service.findAll();
         model.addAttribute("posts", posts);
         return "feed";
     }

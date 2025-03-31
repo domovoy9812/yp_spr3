@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.spr3.model;
+package ru.yandex.practicum.bliushtein.spr3.core.model;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -6,14 +6,16 @@ import java.util.UUID;
 public class Post {
     private UUID id;
     private String name;
-    private String text;
+    private String fullText;
+    private String shortText;
     private ZonedDateTime createdWhen;
     private int likesCount;
 
-    public Post(UUID id, String name, String text, ZonedDateTime createdWhen, int likesCount) {
+    public Post(UUID id, String name, String fullText, String shortText, ZonedDateTime createdWhen, int likesCount) {
         this.id = id;
         this.name = name;
-        this.text = text;
+        this.fullText = fullText;
+        this.shortText = shortText;
         this.createdWhen = createdWhen;
         this.likesCount = likesCount;
     }
@@ -34,12 +36,20 @@ public class Post {
         this.name = name;
     }
 
-    public String getText() {
-        return text;
+    public String getFullText() {
+        return fullText;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setFullText(String fullText) {
+        this.fullText = fullText;
+    }
+
+    public String getShortText() {
+        return shortText;
+    }
+
+    public void setShortText(String shortText) {
+        this.shortText = shortText;
     }
 
     public ZonedDateTime getCreatedWhen() {
