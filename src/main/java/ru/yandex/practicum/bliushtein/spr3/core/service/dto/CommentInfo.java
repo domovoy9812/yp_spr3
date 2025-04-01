@@ -1,19 +1,17 @@
-package ru.yandex.practicum.bliushtein.spr3.core.model;
+package ru.yandex.practicum.bliushtein.spr3.core.service.dto;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-public class Comment {
+public class CommentInfo {
     UUID id;
     String text;
     ZonedDateTime createdWhen;
-    UUID postId;
 
-    public Comment(UUID id, String text, ZonedDateTime createdWhen, UUID postId) {
+    public CommentInfo(UUID id, String text, ZonedDateTime createdWhen) {
         this.id = id;
         this.text = text;
         this.createdWhen = createdWhen;
-        this.postId = postId;
     }
 
     public UUID getId() {
@@ -38,13 +36,5 @@ public class Comment {
 
     public void setCreatedWhen(ZonedDateTime createdWhen) {
         this.createdWhen = createdWhen;
-    }
-
-    public UUID getPostId() {
-        return postId;
-    }
-
-    public void setPostId(UUID postId) {
-        this.postId = postId;
     }
 }

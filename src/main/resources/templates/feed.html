@@ -64,7 +64,7 @@
                     <span th:text="${post.createdWhen}"></span>
                 </p>
                 <p>
-                    <span th:each="tag : ${post.tags}" th:text="${tag}"></span>
+                    <span th:each="tag : ${post.tags}" th:text="${'#' + tag}"></span>
                 </p>
             </td>
         </tr>

@@ -44,52 +44,42 @@
 </head>
 
 <body>
-    <!-- Вместо href ссылка на ленту постов -->
-    <a href="..." style="float:right;">
+    <a href="/feed" style="float:right;">
         <b>НА ГЛАВНУЮ &cudarrr;</b>
     </a>
     <table style="width:50%;margin-left:auto;margin-right:auto;">
         <tr>
             <td>
-                <!-- Вместо action ссылка на страницу редактирования поста -->
-                <form method="GET" th:action="...">
+                <form method="GET" th:action="@{/post/{id}/edit(id=${post.id})}">
                     <button style="float:right;">РЕДАКТИРОВАТЬ ПОСТ</button>
                 </form>
             </td>
             <td>
-                <!-- Вместо action ссылка на эндпоинт удаления поста -->
-                <form method="POST" th:action="...">
+                <form method="POST" th:action="@{/post/{id}/delete(id=${post.id})}">
                     <button style="float:right;">УДАЛИТЬ ПОСТ</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-            	<!-- Вместо text название поста -->
-                <h2 th:text="..."></h2>
+                <h2 th:text="${post.name}"></h2>
                 <p>
                     <!-- Вместо src ссылка на картинку поста -->
-                    <img height="300" th:src="...">
+                    <!--img height="300" th:src="..."-->
                 </p>
                 <p>
                     <!-- Вместо action ссылка на эндпоинт изменения числа лайков поста -->
-                    <form th:action="..." method="post">
+                    <form th:action="@{/post/{id}/like(id=${post.id})}" method="post">
                     	<!-- Увеличение -->
                         <button name="like" value="true">&#x1F44D;</button>
-                        <!-- Вместо text число лайков поста -->
-                        <span th:text="..."></span>
+                        <span th:text="${post.likesCount}"></span>
                         <!-- Уменьшение -->
                         <button name="like" value="false">&#128078;</button>
-                        <!-- Вместо text число комментариев поста -->
-                        <span th:text="..." style="float:right;"></span>
+                        <span th:text="${post.commentsCount}" style="float:right;"></span>
                     </form>
                 </p>
                 <p>
-                    <!-- 
-            		В each итерируемся по тегам поста
-            		В text выводим название тега поста
-            	    -->
-                    <span th:each="..." th:text="..."></span>
+                    <span th:each="tag : ${post.tags}" th:text="${'#' + tag}"></span>
                 </p>
             </td>
         </tr>
@@ -97,8 +87,9 @@
 	    В each итерируемся по абзацам текста поста
 	    В text выводим абзац текста поста
 	-->
-        <tr th:each="...">
-            <td th:text="..."></td>
+    <!--    <tr th:each="..."> пока поддерживается только полный текст-->
+        <tr>
+            <td th:text="${post.fullText}"></td>
         </tr>
         <tr>
             <td>
@@ -107,22 +98,22 @@
             </td>
         </tr>
         <!-- В each итерируемся по комментариям поста -->
-        <tr th:each="...">
+        <tr th:each="comment : ${post.comments}">
             <td style="border-left:thin solid grey;">
             	<!-- В action ссылка на эндпоинт редактирования комментария поста -->
-                <form method="POST" th:action="...">
+                <form method="POST" th:action="@{/comment/{id}/update(id=${comment.id})}">
                     <!-- 
                     	В id идентификатор поста с префиксом 'comment' (нужно для работы JavaScript-a из <head>)
                     	В text текст комментария поста
                     -->
-                    <span th:id="${'comment'+...}" th:text="..."></span>
+                    <span th:id="${'comment'+ post.id}" th:text="${comment.text}"></span>
                     <!-- В id идентификатор поста -->
-                    <button th:id="..." onclick="editComment(this.id)" style="float:right;">&#9998;</button>
+                    <button th:id="${post.id}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
                 </form>
             </td>
             <td>
             	<!-- В action ссылка на эндпоинт удаления комментария поста -->
-                <form method="POST" th:action="...">
+                <form method="POST" th:action="@{/comment/{id}/delete(id=${comment.id})}">
                     <button style="float:right;">&#10007;</button>
                 </form>
             </td>
@@ -130,7 +121,7 @@
         <tr>
             <td>
             	<!-- В action ссылка на эндпоинт добавления комментария поста -->
-                <form id="addCommentForm" th:action="..." method="post">
+                <form id="addCommentForm" th:action="@{/comment/add}" method="post">
                     <button id="addCommentButton" style="float:right;" onclick="addComment()">Добавить комментарий</button>
                 </form>
             </td>

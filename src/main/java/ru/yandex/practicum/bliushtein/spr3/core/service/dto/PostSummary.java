@@ -1,27 +1,19 @@
 package ru.yandex.practicum.bliushtein.spr3.core.service.dto;
 
-import ru.yandex.practicum.bliushtein.spr3.core.model.Post;
-import ru.yandex.practicum.bliushtein.spr3.core.model.Tag;
-
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 public class PostSummary {
-    private String id;
-    private String name;
-    private String shortText;
-    private ZonedDateTime createdWhen;
-    private int likesCount;
-    private List<String> tags;
-    private int commentsCount;
+    protected UUID id;
+    protected String name;
+    protected String shortText;
+    protected ZonedDateTime createdWhen;
+    protected int likesCount;
+    protected List<String> tags;
+    protected int commentsCount;
 
-    public PostSummary(Post post, List<Tag> tags, int commentsCount) {
-        this(post.getId().toString(), post.getName(), post.getShortText(), post.getCreatedWhen(),
-                post.getLikesCount(), tags.stream().map(Tag::getName).collect(Collectors.toList()), commentsCount);
-    }
-
-    public PostSummary(String id, String name, String shortText, ZonedDateTime createdWhen, int likesCount,
+    public PostSummary(UUID id, String name, String shortText, ZonedDateTime createdWhen, int likesCount,
                        List<String> tags, int commentsCount) {
         this.id = id;
         this.name = name;
@@ -32,11 +24,11 @@ public class PostSummary {
         this.commentsCount = commentsCount;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
