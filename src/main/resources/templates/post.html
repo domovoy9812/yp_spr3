@@ -101,7 +101,7 @@
         <tr th:each="comment : ${post.comments}">
             <td style="border-left:thin solid grey;">
             	<!-- В action ссылка на эндпоинт редактирования комментария поста -->
-                <form method="POST" th:action="@{/comment/{id}/update(id=${comment.id})}">
+                <form method="POST" th:action="@{/post/{postId}/comment/{id}/update(postId=${post.id}, id=${comment.id})}">
                     <!-- 
                     	В id идентификатор поста с префиксом 'comment' (нужно для работы JavaScript-a из <head>)
                     	В text текст комментария поста
@@ -113,7 +113,7 @@
             </td>
             <td>
             	<!-- В action ссылка на эндпоинт удаления комментария поста -->
-                <form method="POST" th:action="@{/comment/{id}/delete(id=${comment.id})}">
+                <form method="POST" th:action="@{/post/{postId}/comment/{id}/delete(postId=${post.id}, id=${comment.id})}">
                     <button style="float:right;">&#10007;</button>
                 </form>
             </td>
@@ -121,7 +121,7 @@
         <tr>
             <td>
             	<!-- В action ссылка на эндпоинт добавления комментария поста -->
-                <form id="addCommentForm" th:action="@{/comment/add}" method="post">
+                <form id="addCommentForm" th:action="@{/post/{postId}/comment/add(postId=${post.id})}" method="post">
                     <button id="addCommentButton" style="float:right;" onclick="addComment()">Добавить комментарий</button>
                 </form>
             </td>

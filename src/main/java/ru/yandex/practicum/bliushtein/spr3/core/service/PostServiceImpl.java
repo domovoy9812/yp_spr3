@@ -56,7 +56,8 @@ public class PostServiceImpl implements PostService {
     }
 
     private List<CommentInfo> transformCommentsToCommentInfos(List<Comment> comments) {
-        return comments.stream().map(c -> new CommentInfo(c.getId(), c.getText(), c.getCreatedWhen()))
+        return comments.stream()
+                .map(c -> new CommentInfo(c.getId(), c.getText(), c.getCreatedWhen()))
                 .collect(Collectors.toList());
     }
 
@@ -73,5 +74,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(UUID id) {
         postRepository.deletePost(id);
+    }
+
+    @Override
+    public void addComment(UUID postId, String text) {
+        postRepository.addComment(postId, text);
+    }
+
+    @Override
+    public void deleteComment(UUID commentId) {
+        postRepository.deleteComment(commentId);
+    }
+
+    @Override
+    public void updateComment(UUID commentId, String text) {
+        postRepository.updateComment(commentId, text);
     }
 }

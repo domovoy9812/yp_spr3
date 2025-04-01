@@ -21,4 +21,10 @@ public interface PostRepository {
     void removeLike(UUID id);
 
     void deletePost(UUID id);
+
+    void addComment(UUID postId, String text);
+
+    void deleteComment(UUID commentId);
+
+    void updateComment(UUID commentId, String text);
 }

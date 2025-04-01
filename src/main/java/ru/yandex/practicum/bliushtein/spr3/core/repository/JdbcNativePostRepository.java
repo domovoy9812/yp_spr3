@@ -112,4 +112,19 @@ public class JdbcNativePostRepository implements PostRepository {
     public void deletePost(UUID id) {
         jdbcTemplate.update("delete from posts where id = ?", id);
     }
+
+    @Override
+    public void addComment(UUID postId, String text) {
+        jdbcTemplate.update("insert into comments (post, text) values (?, ?)", postId, text);
+    }
+
+    @Override
+    public void deleteComment(UUID commentId) {
+        jdbcTemplate.update("delete from comments where id = ?", commentId);
+    }
+
+    @Override
+    public void updateComment(UUID commentId, String text) {
+        jdbcTemplate.update("update comments set text = ? where id = ?", text, commentId);
+    }
 }
