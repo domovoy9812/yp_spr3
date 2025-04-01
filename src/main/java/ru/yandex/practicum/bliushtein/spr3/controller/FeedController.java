@@ -1,5 +1,6 @@
 package ru.yandex.practicum.bliushtein.spr3.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,10 @@ public class FeedController {
     }
 
     @GetMapping
-    public String feed(Model model) {
-        List<PostSummary> posts = service.findAll();
+    public String feed(Model model, @RequestParam(name = "tag", required = false) String tag) {
+        List<PostSummary> posts = StringUtils.isBlank(tag) ? service.findAll() : service.findByTag(tag);
+        model.addAttribute("tag", tag);
         model.addAttribute("posts", posts);
         return "feed";
     }
-
 }

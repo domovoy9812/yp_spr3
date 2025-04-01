@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PostService {
     List<PostSummary> findAll();
+
+    List<PostSummary> findByTag(String tag);
 }

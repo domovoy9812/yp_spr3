@@ -51,4 +51,20 @@ public class JdbcNativePostRepository implements PostRepository {
         return jdbcTemplate.queryForObject("select count(*) from comments where post = ?", Integer.class,
                 post.getId());
     }
+
+    @Override
+    public List<Post> findByTag(String tag) {
+        //TODO avoid code duplicate
+        return jdbcTemplate.queryForStream("select posts.* from tags, posts where tags.name = ? and tags.post = posts.id",
+                (rs, rowNum) -> new Post(
+                        rs.getObject("id", UUID.class),
+                        rs.getString("name"),
+                        rs.getString("full_text"),
+                        //TODO add support for short text
+                        rs.getString("full_text"),
+                        ZonedDateTime.ofInstant(rs.getTimestamp("created_when").toInstant(),
+                                ZoneId.systemDefault()),
+                        rs.getInt("likes")
+                ), tag).collect(Collectors.toList());
+    }
 }

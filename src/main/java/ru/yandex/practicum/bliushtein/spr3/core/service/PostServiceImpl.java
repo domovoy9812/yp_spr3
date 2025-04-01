@@ -29,4 +29,10 @@ public class PostServiceImpl implements PostService {
         int commentsCount = postRepository.getCommentsCount(post);
         return new PostSummary(post, tags, commentsCount);
     }
+
+    @Override
+    public List<PostSummary> findByTag(String tag) {
+        List<Post> posts = postRepository.findByTag(tag);
+        return posts.stream().map(this::createPostSummary).collect(Collectors.toList());
+    }
 }

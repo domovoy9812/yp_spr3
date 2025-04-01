@@ -9,4 +9,6 @@ public interface PostRepository {
     List<Post> findAll();
     List<Tag> getTags(Post post);
     int getCommentsCount(Post post);
+
+    List<Post> findByTag(String tag);
 }
