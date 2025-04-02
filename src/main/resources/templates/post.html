@@ -106,9 +106,9 @@
                     	В id идентификатор поста с префиксом 'comment' (нужно для работы JavaScript-a из <head>)
                     	В text текст комментария поста
                     -->
-                    <span th:id="${'comment'+ post.id}" th:text="${comment.text}"></span>
+                    <span th:id="${'comment'+ comment.id}" th:text="${comment.text}"></span>
                     <!-- В id идентификатор поста -->
-                    <button th:id="${post.id}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
+                    <button th:id="${comment.id}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
                 </form>
             </td>
             <td>

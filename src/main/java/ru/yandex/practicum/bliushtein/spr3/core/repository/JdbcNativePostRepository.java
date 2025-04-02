@@ -24,7 +24,7 @@ public class JdbcNativePostRepository implements PostRepository {
     @Override
     public List<Post> getAllPosts() {
         return jdbcTemplate.query(
-                "select * from posts",
+                "select * from posts order by created_when desc",
                 (rs, rowNum) -> new Post(
                         rs.getObject("id", UUID.class),
                         rs.getString("name"),
@@ -39,7 +39,7 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public Post getPost(UUID id) {
-        return jdbcTemplate.queryForObject("select * from posts where id = ?",
+        return jdbcTemplate.queryForObject("select * from posts where id = ? order by created_when desc",
                 (rs, rowNum) -> new Post(
                         rs.getObject("id", UUID.class),
                         rs.getString("name"),
@@ -65,14 +65,24 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public int getCommentsCount(UUID postId) {
-        return jdbcTemplate.queryForObject("select count(*) from comments where post = ?", Integer.class,
+        return jdbcTemplate.queryForObject("""
+                        select count(*) 
+                        from comments
+                        where post = ?
+                        """, Integer.class,
                 postId);
     }
 
     @Override
     public List<Post> getPostByTag(String tag) {
         //TODO avoid code duplicate
-        return jdbcTemplate.queryForStream("select posts.* from tags, posts where tags.name = ? and tags.post = posts.id",
+        return jdbcTemplate.queryForStream("""
+                        select posts.*
+                        from tags, posts
+                        where tags.name = ?
+                            and tags.post = posts.id
+                        order by posts.created_when desc
+                        """,
                 (rs, rowNum) -> new Post(
                         rs.getObject("id", UUID.class),
                         rs.getString("name"),
@@ -88,7 +98,7 @@ public class JdbcNativePostRepository implements PostRepository {
     @Override
     public List<Comment> getComments(UUID postId) {
         //TODO select w/o stream -> list convert
-        return jdbcTemplate.queryForStream("select * from comments where post = ?",
+        return jdbcTemplate.queryForStream("select * from comments where post = ? order by created_when desc",
                 (rs, rowNum) -> new Comment(
                         rs.getObject("id", UUID.class),
                         rs.getString("text"),
