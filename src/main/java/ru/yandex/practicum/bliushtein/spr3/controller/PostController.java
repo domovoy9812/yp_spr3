@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bliushtein.spr3.core.service.PostService;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostDetails;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -18,28 +19,56 @@ public class PostController {
         this.service = service;
     }
 
-    @GetMapping(value = "/{id}")
-    public String showPost(Model model, @PathVariable(name = "id") UUID id) {
+    @GetMapping("/{id}")
+    public String showPost(Model model, @PathVariable("id") UUID id) {
         PostDetails post = service.getPostDetails(id);
         model.addAttribute("post", post);
         return "post";
     }
 
-    @PostMapping(value = "/{id}/delete")
-    public String deletePost(Model model, @PathVariable(name = "id") UUID id) {
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable("id") UUID id) {
         service.deletePost(id);
         return "redirect:/feed";
     }
 
-    @PostMapping(value = "/{id}/edit")
-    public String editPost(Model model, @PathVariable(name = "id") UUID id) {
+    @GetMapping("/{id}/edit")
+    public String editPost(Model model, @PathVariable("id") UUID id) {
         PostDetails post = service.getPostDetails(id);
         model.addAttribute("post", post);
-        return "post";
+        return "add-post";
     }
 
-    @PostMapping(value = "/{id}/like")
-    public String addLike(Model model, @PathVariable(name = "id") UUID id,
+    @GetMapping("/new")
+    public String newPost(Model model) {
+        model.addAttribute("post", new PostDetails());
+        return "add-post";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String updatePost(Model model, @PathVariable(name = "id") UUID id,
+                             @RequestParam("tag") List<String> tags,
+                             @RequestParam("text") String fullText,
+                             @RequestParam("name") String name) {
+        service.updatePost(id, name, fullText, tags);
+        PostDetails post = service.getPostDetails(id);
+        model.addAttribute("post", post);
+        return "redirect:/post/" + id;
+    }
+
+    @PostMapping("/create")
+    public String createPost(Model model,
+                             @RequestParam("tag") List<String> tags,
+                             @RequestParam("text") String fullText,
+                             @RequestParam("name") String name) {
+        UUID id = service.createPost(name, fullText, tags);
+        PostDetails post = service.getPostDetails(id);
+        model.addAttribute("post", post);
+        return "redirect:/post/" + id;
+    }
+
+    @PostMapping("/{id}/like")
+    public String addLike(Model model, @PathVariable("id") UUID id,
                           @RequestParam(name = "like") boolean addLike) {
         if (addLike) {
             service.addLike(id);

@@ -12,7 +12,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
 public class DataSourceConfiguration {
@@ -39,7 +38,6 @@ public class DataSourceConfiguration {
     @EventListener
     public void populate(ContextRefreshedEvent event) {
         DataSource dataSource = event.getApplicationContext().getBean(DataSource.class);
-
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("schema.sql"));
         populator.execute(dataSource);

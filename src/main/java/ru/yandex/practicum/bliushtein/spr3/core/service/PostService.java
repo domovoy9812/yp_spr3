@@ -23,4 +23,8 @@ public interface PostService {
     void deleteComment(UUID commentId);
 
     void updateComment(UUID commentId, String text);
+
+    UUID createPost(String name, String fullText, List<String> tags);
+
+    void updatePost(UUID id, String name, String fullText, List<String> tags);
 }

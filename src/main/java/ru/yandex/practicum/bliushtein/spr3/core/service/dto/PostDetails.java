@@ -1,6 +1,9 @@
 package ru.yandex.practicum.bliushtein.spr3.core.service.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +11,13 @@ public class PostDetails extends PostSummary {
 
     private String fullText;
     private List<CommentInfo> comments;
+
+    public PostDetails() {
+        super(null, StringUtils.EMPTY, StringUtils.EMPTY, null, 0, Collections.emptyList(),
+                0);
+        this.fullText = StringUtils.EMPTY;
+        this.comments = Collections.emptyList();
+    }
 
     public PostDetails(UUID id, String name, String shortText, String fullText, ZonedDateTime createdWhen,
                        int likesCount, List<String> tags, List<CommentInfo> comments) {

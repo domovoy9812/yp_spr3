@@ -1,23 +1,62 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<script>
+    function addTag(element) {
+        const table = element.parentNode.parentNode.parentNode;
+        const newButton = document.createElement("button");
+        newButton.innerHTML = "+";
+        newButton.onclick = function() {addTag(newButton);};
+        element.parentNode.appendChild(newButton);
+        element.remove();
+        const tagNameElement = document.getElementById("new_tag_name");
+        const newTagName = tagNameElement.value;
+        if (newTagName == "") {
+            alert("Имя тега не должно быть пустым!");
+            return;
+        }
+        const duplicate = document.evaluate("//input[@name='tag'][@value='" + newTagName + "']", document,
+                null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (duplicate != null) {
+            alert("Тег с таким именем уже есть!");
+            return;
+        }
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        const tagElement = document.createElement("input");
+        tagElement.type = "text";
+        tagElement.name = "tag";
+        tagElement.setAttribute("readonly", "readonly");
+        tagElement.setAttribute("value", newTagName);
+        const button = document.createElement("button");
+        button.innerHTML = "&#10007;";
+        button.onclick = function() {removeTag(button);};
+        td.appendChild(tagElement);
+        td.appendChild(button);
+        tr.appendChild(td);
+        table.insertBefore(tr, newButton.parentNode.parentNode);
+        tagNameElement.value = "";
+    }
+    function removeTag(element) {
+        element.parentNode.parentNode.remove();
+    }
+</script>
 <head>
     <title>Витрина товаров</title>
 </head>
 
 <body>
 <!-- Вместо href ссылка на ленту постов -->
-<a href="..." style="float:right;">
+<a th:href="@{/feed}" style="float:right;">
     <b>НА ГЛАВНУЮ &cudarrr;</b>
 </a>
 <!-- Вместо action ссылка на форму добавления или редактирования поста -->
-<form method="POST" th:action="..." enctype="multipart/form-data">
+<form method="POST" th:action="${post.id == null} ? @{/post/create} : @{/post/{id}/edit(id=${post.id})}">
     <table style="width:50%;margin-left:auto;margin-right:auto;">
         <tr>
             <td>
                 <h3>Название</h3>
                 <!-- Вместо text название поста для формы редактирования или пустая строка для формы добавления -->
-                <textarea rows="2" style="width: 100%;" name="title" th:text="..."></textarea>
+                <textarea rows="2" style="width: 100%;" name="name" th:text="${post.name}"></textarea>
             </td>
         </tr>
         <tr>
@@ -29,21 +68,30 @@
         <tr>
             <td>
                 <h3>Теги</h3>
-                <!-- Вместо text строка с тегами поста для формы редактирования или пустая строка для формы добавления -->
-                <textarea rows="2" style="width: 100%;" name="tags" th:text="..."></textarea>
+            </td>
+        </tr>
+        <tr th:each="tag : ${post.tags}">
+            <td>
+                <input type="text" readonly name="tag" th:value="${tag}"/>
+                <button onclick="removeTag(this)">&#10007;</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="new_tag_name"/>
+                <button onclick="addTag(this)">+</button>
             </td>
         </tr>
         <tr>
             <td>
                 <h3>Текст</h3>
                 <!-- Вместо text текст поста для формы редактирования или пустая строка для формы добавления -->
-                <textarea rows="30" style="width: 100%;" name="text" th:text="..."></textarea>
+                <textarea rows="30" style="width: 100%;" name="text" th:text="${post.fullText}"></textarea>
             </td>
         </tr>
         <tr>
             <td>
-            	<!-- Вместо text 'Редактировать' для формы редактирования или 'Сохранить' для формы добавления -->
-                <button style="float:right;" th:text="..."></button>
+                <button style="float:right;" th:text="${post.id == null} ? 'Создать' : 'Обновить'"></button>
             </td>
         </tr>
     </table>

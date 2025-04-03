@@ -1,14 +1,16 @@
 package ru.yandex.practicum.bliushtein.spr3.core.service;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.bliushtein.spr3.core.model.Comment;
 import ru.yandex.practicum.bliushtein.spr3.core.model.Post;
-import ru.yandex.practicum.bliushtein.spr3.core.model.Tag;
 import ru.yandex.practicum.bliushtein.spr3.core.repository.PostRepository;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.CommentInfo;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostDetails;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostSummary;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,14 +31,10 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostSummary createPostSummary(Post post) {
-        List<Tag> tags = postRepository.getTags(post.getId());
+        List<String> tags = postRepository.getTags(post.getId());
         int commentsCount = postRepository.getCommentsCount(post.getId());
         return new PostSummary(post.getId(), post.getName(), post.getShortText(), post.getCreatedWhen(),
-                post.getLikesCount(), transformTagsToStrings(tags), commentsCount);
-    }
-
-    private List<String> transformTagsToStrings(List<Tag> tags) {
-        return tags.stream().map(Tag::getName).collect(Collectors.toList());
+                post.getLikesCount(), tags, commentsCount);
     }
 
     @Override
@@ -48,10 +46,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDetails getPostDetails(UUID id) {
         Post post = postRepository.getPost(id);
-        List<Tag> tags = postRepository.getTags(id);
+        List<String> tags = postRepository.getTags(id);
         List<Comment> comments = postRepository.getComments(id);
         return new PostDetails(post.getId(), post.getName(), post.getShortText(), post.getFullText(),
-                post.getCreatedWhen(), post.getLikesCount(), transformTagsToStrings(tags),
+                post.getCreatedWhen(), post.getLikesCount(), tags,
                 transformCommentsToCommentInfos(comments));
     }
 
@@ -59,6 +57,39 @@ public class PostServiceImpl implements PostService {
         return comments.stream()
                 .map(c -> new CommentInfo(c.getId(), c.getText(), c.getCreatedWhen()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UUID createPost(String name, String fullText, List<String> tags) {
+        UUID id = postRepository.createPost(name, fullText, getShortText(fullText));
+        createTags(id, tags);
+        return id;
+    }
+
+    private static String getShortText(String fullText) {
+        return fullText.lines().findFirst().orElse(StringUtils.EMPTY);
+    }
+
+    private void createTags(UUID id, Collection<String> tags) {
+        for (String tag : tags) {
+            postRepository.createTag(id, tag);
+        }
+    }
+
+    private void removeTags(UUID id, Collection<String> removedTags) {
+        if (CollectionUtils.isNotEmpty(removedTags)) {
+            postRepository.deleteTags(id, removedTags);
+        }
+    }
+
+    @Override
+    public void updatePost(UUID id, String name, String fullText, List<String> tags) {
+        postRepository.updatePost(id, name, fullText, getShortText(fullText));
+        List<String> storedTags = postRepository.getTags(id);
+        Collection<String> addedTags = CollectionUtils.subtract(tags, storedTags);
+        createTags(id, addedTags);
+        Collection<String> removedTags = CollectionUtils.subtract(storedTags, tags);
+        removeTags(id, removedTags);
     }
 
     @Override
