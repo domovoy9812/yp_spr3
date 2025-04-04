@@ -28,9 +28,9 @@ public interface PostRepository {
 
     void updateComment(UUID commentId, String text);
 
-    UUID createPost(String name, String fullText, String shortText);
+    UUID createPost(String name, String fullText, String shortText, UUID imageKey);
 
-    void updatePost(UUID id, String name, String fullText, String shortText);
+    void updatePost(UUID id, String name, String fullText, String shortText, UUID imageKey);
 
     void createTag(UUID id, String tag);
 

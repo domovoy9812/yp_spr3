@@ -12,9 +12,10 @@ public class PostSummary {
     protected int likesCount;
     protected List<String> tags;
     protected int commentsCount;
+    protected UUID imageKey;
 
     public PostSummary(UUID id, String name, String shortText, ZonedDateTime createdWhen, int likesCount,
-                       List<String> tags, int commentsCount) {
+                       List<String> tags, int commentsCount, UUID imageKey) {
         this.id = id;
         this.name = name;
         this.shortText = shortText;
@@ -22,6 +23,7 @@ public class PostSummary {
         this.likesCount = likesCount;
         this.tags = tags;
         this.commentsCount = commentsCount;
+        this.imageKey = imageKey;
     }
 
     public UUID getId() {
@@ -78,5 +80,13 @@ public class PostSummary {
 
     public void setCommentsCount(int commentsCount) {
         this.commentsCount = commentsCount;
+    }
+
+    public UUID getImageKey() {
+        return imageKey;
+    }
+
+    public void setImageKey(UUID imageKey) {
+        this.imageKey = imageKey;
     }
 }

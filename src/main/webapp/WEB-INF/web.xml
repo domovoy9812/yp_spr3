@@ -11,7 +11,10 @@
     <!-- Имя и класс основного сервлета приложения-->
     <servlet-name>dispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-
+    <!-- TODO put relational path somehow -->
+    <multipart-config>
+      <location>F:\programs\apache-tomcat-10.1.39\temp</location>
+    </multipart-config>
     <!-- Настройка Spring-контекста и Java-конфигурации -->
     <init-param>
       <param-name>contextClass</param-name>

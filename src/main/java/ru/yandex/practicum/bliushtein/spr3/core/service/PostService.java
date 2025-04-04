@@ -1,8 +1,10 @@
 package ru.yandex.practicum.bliushtein.spr3.core.service;
 
+import ru.yandex.practicum.bliushtein.spr3.core.service.dto.ImageInfo;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostDetails;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostSummary;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public interface PostService {
 
     void removeLike(UUID id);
 
-    void deletePost(UUID id);
+    void deletePost(UUID id, ImageInfo imageInfo);
 
     void addComment(UUID postId, String text);
 
@@ -24,7 +26,9 @@ public interface PostService {
 
     void updateComment(UUID commentId, String text);
 
-    UUID createPost(String name, String fullText, List<String> tags);
+    UUID createPost(String name, String fullText, List<String> tags, ImageInfo imageInfo);
 
-    void updatePost(UUID id, String name, String fullText, List<String> tags);
+    void updatePost(UUID id, String name, String fullText, List<String> tags, ImageInfo imageInfo);
+
+    InputStream getImageByKey(UUID key);
 }

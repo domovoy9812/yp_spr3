@@ -3,9 +3,12 @@ package ru.yandex.practicum.bliushtein.spr3.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.bliushtein.spr3.core.service.PostService;
+import ru.yandex.practicum.bliushtein.spr3.core.service.dto.ImageInfo;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostDetails;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +16,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/post")
 public class PostController {
+
     private final PostService service;
 
     PostController(PostService service) {
@@ -27,8 +31,9 @@ public class PostController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deletePost(@PathVariable("id") UUID id) {
-        service.deletePost(id);
+    public String deletePost(@PathVariable("id") UUID id,
+                             @RequestParam(value = "image_key", required = false) UUID imageKey) {
+        service.deletePost(id, SpringImageInfo.forDelete(imageKey));
         return "redirect:/feed";
     }
 
@@ -46,11 +51,15 @@ public class PostController {
     }
 
     @PostMapping("/{id}/edit")
-    public String updatePost(Model model, @PathVariable(name = "id") UUID id,
+    public String updatePost(Model model,
+                             @PathVariable(name = "id") UUID id,
                              @RequestParam("tag") List<String> tags,
+                             @RequestParam(value = "image", required = false) MultipartFile image,
+                             @RequestParam(value = "image_key", required = false) UUID imageKey,
                              @RequestParam("text") String fullText,
                              @RequestParam("name") String name) {
-        service.updatePost(id, name, fullText, tags);
+        ImageInfo imageInfo = SpringImageInfo.forUpdate(image, imageKey);
+        service.updatePost(id, name, fullText, tags, imageInfo);
         PostDetails post = service.getPostDetails(id);
         model.addAttribute("post", post);
         return "redirect:/post/" + id;
@@ -59,9 +68,11 @@ public class PostController {
     @PostMapping("/create")
     public String createPost(Model model,
                              @RequestParam("tag") List<String> tags,
+                             @RequestParam(value = "image", required = false) MultipartFile image,
                              @RequestParam("text") String fullText,
-                             @RequestParam("name") String name) {
-        UUID id = service.createPost(name, fullText, tags);
+                             @RequestParam("name") String name) throws IOException {
+        ImageInfo imageInfo = SpringImageInfo.forCreate(image);
+        UUID id = service.createPost(name, fullText, tags, imageInfo);
         PostDetails post = service.getPostDetails(id);
         model.addAttribute("post", post);
         return "redirect:/post/" + id;

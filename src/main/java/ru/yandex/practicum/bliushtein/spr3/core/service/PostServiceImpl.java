@@ -3,13 +3,18 @@ package ru.yandex.practicum.bliushtein.spr3.core.service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.bliushtein.spr3.core.model.Comment;
 import ru.yandex.practicum.bliushtein.spr3.core.model.Post;
+import ru.yandex.practicum.bliushtein.spr3.core.repository.FileStorage;
 import ru.yandex.practicum.bliushtein.spr3.core.repository.PostRepository;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.CommentInfo;
+import ru.yandex.practicum.bliushtein.spr3.core.service.dto.ImageInfo;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostDetails;
 import ru.yandex.practicum.bliushtein.spr3.core.service.dto.PostSummary;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -19,9 +24,10 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-
-    public PostServiceImpl(PostRepository postRepository) {
+    private final FileStorage fileStorage;
+    public PostServiceImpl(PostRepository postRepository, FileStorage fileStorage) {
         this.postRepository = postRepository;
+        this.fileStorage = fileStorage;
     }
 
     @Override
@@ -34,7 +40,7 @@ public class PostServiceImpl implements PostService {
         List<String> tags = postRepository.getTags(post.getId());
         int commentsCount = postRepository.getCommentsCount(post.getId());
         return new PostSummary(post.getId(), post.getName(), post.getShortText(), post.getCreatedWhen(),
-                post.getLikesCount(), tags, commentsCount);
+                post.getLikesCount(), tags, commentsCount, post.getImageKey());
     }
 
     @Override
@@ -50,7 +56,7 @@ public class PostServiceImpl implements PostService {
         List<Comment> comments = postRepository.getComments(id);
         return new PostDetails(post.getId(), post.getName(), post.getShortText(), post.getFullText(),
                 post.getCreatedWhen(), post.getLikesCount(), tags,
-                transformCommentsToCommentInfos(comments));
+                transformCommentsToCommentInfos(comments), post.getImageKey());
     }
 
     private List<CommentInfo> transformCommentsToCommentInfos(List<Comment> comments) {
@@ -60,10 +66,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public UUID createPost(String name, String fullText, List<String> tags) {
-        UUID id = postRepository.createPost(name, fullText, getShortText(fullText));
+    @Transactional
+    public UUID createPost(String name, String fullText, List<String> tags, ImageInfo imageInfo) {
+        UUID imageKey = processImage(imageInfo);
+        UUID id = postRepository.createPost(name, fullText, getShortText(fullText), imageKey);
         createTags(id, tags);
         return id;
+    }
+
+    private UUID processImage(ImageInfo imageInfo) {
+        try {
+            return switch (imageInfo.getAction()) {
+                case ADD -> fileStorage.saveFile(imageInfo.getInputStream());
+                case SAME -> imageInfo.getKey();
+                case DELETE -> {
+                    fileStorage.deleteFile(imageInfo.getKey());
+                    yield null;
+                }
+                case UPDATE -> {
+                    fileStorage.updateFile(imageInfo.getKey(), imageInfo.getInputStream());
+                    yield imageInfo.getKey();
+                }
+            };
+        } catch (IOException exception) {
+            //TODO add correct exception class
+            throw new RuntimeException("Unable to process image file");
+        }
     }
 
     private static String getShortText(String fullText) {
@@ -83,8 +111,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(UUID id, String name, String fullText, List<String> tags) {
-        postRepository.updatePost(id, name, fullText, getShortText(fullText));
+    @Transactional
+    public void updatePost(UUID id, String name, String fullText, List<String> tags, ImageInfo imageInfo) {
+        UUID imageKey = processImage(imageInfo);
+        postRepository.updatePost(id, name, fullText, getShortText(fullText), imageKey);
         List<String> storedTags = postRepository.getTags(id);
         Collection<String> addedTags = CollectionUtils.subtract(tags, storedTags);
         createTags(id, addedTags);
@@ -103,7 +133,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(UUID id) {
+    @Transactional
+    public void deletePost(UUID id, ImageInfo imageInfo) {
+        processImage(imageInfo);
         postRepository.deletePost(id);
     }
 
@@ -120,5 +152,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void updateComment(UUID commentId, String text) {
         postRepository.updateComment(commentId, text);
+    }
+
+    @Override
+    public InputStream getImageByKey(UUID key) {
+        return fileStorage.getFileByKey(key);
     }
 }

@@ -14,14 +14,14 @@ public class PostDetails extends PostSummary {
 
     public PostDetails() {
         super(null, StringUtils.EMPTY, StringUtils.EMPTY, null, 0, Collections.emptyList(),
-                0);
+                0, null);
         this.fullText = StringUtils.EMPTY;
         this.comments = Collections.emptyList();
     }
 
     public PostDetails(UUID id, String name, String shortText, String fullText, ZonedDateTime createdWhen,
-                       int likesCount, List<String> tags, List<CommentInfo> comments) {
-        super(id, name, shortText, createdWhen, likesCount, tags, comments.size());
+                       int likesCount, List<String> tags, List<CommentInfo> comments, UUID imageKey) {
+        super(id, name, shortText, createdWhen, likesCount, tags, comments.size(), imageKey);
         this.fullText = fullText;
         this.comments = comments;
     }

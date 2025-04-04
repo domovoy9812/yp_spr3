@@ -38,7 +38,8 @@ public class JdbcNativePostRepository implements PostRepository {
                 rs.getString("short_text"),
                 ZonedDateTime.ofInstant(rs.getTimestamp("created_when").toInstant(),
                         ZoneId.systemDefault()),
-                rs.getInt("likes")
+                rs.getInt("likes"),
+                rs.getObject("image_key", UUID.class)
         );
     }
 
@@ -121,25 +122,26 @@ public class JdbcNativePostRepository implements PostRepository {
     }
 
     @Override
-    public UUID createPost(String name, String fullText, String shortText) {
+    public UUID createPost(String name, String fullText, String shortText, UUID imageKey) {
         return jdbcTemplate.queryForObject("""
-                        insert into posts (name, full_text, short_text)
-                        values (?, ?, ?)
+                        insert into posts (name, full_text, short_text, image_key)
+                        values (?, ?, ?, ?)
                         returning id
                         """,
                 (rs, rowNum) -> rs.getObject("id", UUID.class),
-                name, fullText, shortText);
+                name, fullText, shortText, imageKey);
     }
 
     @Override
-    public void updatePost(UUID id, String name, String fullText, String shortText) {
+    public void updatePost(UUID id, String name, String fullText, String shortText, UUID imageKey) {
         jdbcTemplate.update("""
                 update posts
                 set
                     name = ?,
                     full_text = ?,
-                    short_text = ?
-                where id = ?""", name, fullText, shortText, id);
+                    short_text = ?,
+                    image_key = ?
+                where id = ?""", name, fullText, shortText, imageKey, id);
     }
 
     @Override

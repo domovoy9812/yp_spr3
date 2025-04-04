@@ -55,6 +55,9 @@
                         <h2 th:text="${post.name}"></h2>
                     </a>
                 </p>
+                <p>
+                    <img height="100" th:src="@{/image/{key}(key=${post.imageKey})}">
+                </p>
                 <p th:text="${post.shortText}"></p>
                 <p>
                     <span th:text="${post.likesCount}"></span>

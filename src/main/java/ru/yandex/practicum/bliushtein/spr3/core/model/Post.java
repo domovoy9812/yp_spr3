@@ -10,14 +10,17 @@ public class Post {
     private String shortText;
     private ZonedDateTime createdWhen;
     private int likesCount;
+    private UUID imageKey;
 
-    public Post(UUID id, String name, String fullText, String shortText, ZonedDateTime createdWhen, int likesCount) {
+    public Post(UUID id, String name, String fullText, String shortText, ZonedDateTime createdWhen, int likesCount,
+                UUID imageKey) {
         this.id = id;
         this.name = name;
         this.fullText = fullText;
         this.shortText = shortText;
         this.createdWhen = createdWhen;
         this.likesCount = likesCount;
+        this.imageKey = imageKey;
     }
 
     public UUID getId() {
@@ -66,5 +69,13 @@ public class Post {
 
     public void setLikesCount(int likesCount) {
         this.likesCount = likesCount;
+    }
+
+    public UUID getImageKey() {
+        return imageKey;
+    }
+
+    public void setImageKey(UUID imageKey) {
+        this.imageKey = imageKey;
     }
 }

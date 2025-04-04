@@ -56,6 +56,7 @@
             </td>
             <td>
                 <form method="POST" th:action="@{/post/{id}/delete(id=${post.id})}">
+                    <input type="hidden" name="image_key" th:value="${post.imageKey}">
                     <button style="float:right;">УДАЛИТЬ ПОСТ</button>
                 </form>
             </td>
@@ -64,8 +65,7 @@
             <td>
                 <h2 th:text="${post.name}"></h2>
                 <p>
-                    <!-- Вместо src ссылка на картинку поста -->
-                    <!--img height="300" th:src="..."-->
+                    <img height="300" th:src="@{/image/{key}(key=${post.imageKey})}">
                 </p>
                 <p>
                     <!-- Вместо action ссылка на эндпоинт изменения числа лайков поста -->
