@@ -17,18 +17,17 @@
                     <p>
                         <label for="tag">Найти по тегу: </label>
                         <!-- В value значение со строкой поиска поста, если ничего не ищем, то пустая строка -->
-                        <input id="tag" style="width:300px;" name="tag" th:value="${tag}">
+                        <input id="tag" style="width:300px;" name="tag" th:value="${session.tag}">
                         <button name="action">&#128269;</button>
                     </p>
                     <p>
                         <label for="pageSize">Число постов: </label>
-                        <!-- В selected true, если выбран соответствующий пункт -->
                         <select id="pageSize" name="pageSize" onchange="this.form.submit()">
-                            <option value="5" th:selected="...">5</option>
-                            <option value="10" th:selected="...">10</option>
-                            <option value="20" th:selected="...">20</option>
-                            <option value="50" th:selected="...">50</option>
-                            <option value="100" th:selected="...">100</option>
+                            <option value="5" th:selected="${session.posts.pageSize == 5}">5</option>
+                            <option value="10" th:selected="${session.posts.pageSize == 10}">10</option>
+                            <option value="20" th:selected="${session.posts.pageSize == 20}">20</option>
+                            <option value="50" th:selected="${session.posts.pageSize == 50}">50</option>
+                            <option value="100" th:selected="${session.posts.pageSize == 100}">100</option>
                         </select>
                     </p>
                     <p>
@@ -36,19 +35,19 @@
                     		В if true, если выбрана не первая страница.
                     		В value номер предыдущей страницы.
                     	-->
-                        <button th:if="..." name="pageNumber" th:value="...">&lt;</button>
+                        <button th:if="${!session.posts.firstPage}" name="pageNumber" th:value="${session.posts.page - 1}">&lt;</button>
                         <!-- В text номер текущей страницы -->
-                        <span th:text="..."></span>
+                        <span th:text="${session.posts.page + 1}"></span>
                         <!-- 
                     		В if true, если выбрана не последняя страница.
                     		В value номер следующей страницы.
                     	-->
-                        <button th:if="..." name="pageNumber" th:value="...">&gt;</button>
+                        <button th:if="${!session.posts.lastPage}" name="pageNumber" th:value="${session.posts.page + 1}">&gt;</button>
                     </p>
                 </form>
             </td>
         </tr>
-        <tr th:each="post : ${posts}">
+        <tr th:each="post : ${session.posts.pageList}">
             <td style="border-bottom:thin solid;">
                 <p>
                     <a th:href="@{/post/{id}(id=${post.id})}">
