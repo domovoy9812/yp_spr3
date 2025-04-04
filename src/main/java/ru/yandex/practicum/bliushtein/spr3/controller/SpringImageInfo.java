@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class SpringImageInfo implements ImageInfo {
 
-    private static SpringImageInfo SAME_IMAGE_INFO = new SpringImageInfo(null, null, Action.SAME);
+    private static final SpringImageInfo SAME_IMAGE_INFO = new SpringImageInfo(null, null, Action.SAME);
 
     public static SpringImageInfo forDelete(UUID imageKey) {
         if (imageKey != null) {
@@ -47,11 +47,6 @@ public class SpringImageInfo implements ImageInfo {
         this.image = image;
         this.imageKey = imageKey;
         this.action = action;
-    }
-
-    @Override
-    public long getLength() {
-        return this.image == null ? 0 : image.getSize();
     }
 
     @Override

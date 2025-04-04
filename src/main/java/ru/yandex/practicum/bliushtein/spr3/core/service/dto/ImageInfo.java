@@ -11,7 +11,6 @@ public interface ImageInfo {
         DELETE,
         SAME
     }
-    long getLength();
     InputStream getInputStream() throws IOException;
     UUID getKey();
     Action getAction();
