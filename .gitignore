@@ -1,2 +1,7 @@
 /target/
 /.idea/
+/web/target/
+/service/service-impl/target/
+/service/service-api/target/
+/data/data-impl/target/
+/data/data-api/target/
