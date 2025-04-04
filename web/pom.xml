@@ -19,7 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <tomcat.target>F:\programs\apache-tomcat-10.1.39\webapps\${project.parent.artifactId}</tomcat.target>
+    <tomcat.deploy.url>http://localhost:8080/manager/text</tomcat.deploy.url>
   </properties>
 
   <dependencies>
@@ -68,10 +68,12 @@
     <finalName>${project.parent.artifactId}</finalName>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
-          <webappDirectory>${tomcat.target}</webappDirectory>
+          <url>${tomcat.deploy.url}</url>
+          <server>TomcatServer</server>
+          <path>/${project.parent.artifactId}</path>
         </configuration>
       </plugin>
     </plugins>
