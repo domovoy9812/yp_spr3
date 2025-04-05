@@ -1,0 +1,1 @@
+select * from posts where id = ? order by created_when desc

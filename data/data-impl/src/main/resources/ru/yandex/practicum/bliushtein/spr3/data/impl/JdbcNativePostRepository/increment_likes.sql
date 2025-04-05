@@ -1,0 +1,1 @@
+update posts set likes = likes + 1 where id = ?

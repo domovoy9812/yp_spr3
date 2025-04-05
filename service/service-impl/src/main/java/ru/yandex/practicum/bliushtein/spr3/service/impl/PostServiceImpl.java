@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostSummary> findByTag(String tag) {
-        List<Post> posts = postRepository.getPostByTag(tag);
+        List<Post> posts = postRepository.getPostsByTag(tag);
         return posts.stream().map(this::createPostSummary).collect(Collectors.toList());
     }
 
@@ -157,6 +157,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public InputStream getImageByKey(UUID key) {
-        return fileStorage.getFileByKey(key);
+        return fileStorage.getFile(key);
     }
 }

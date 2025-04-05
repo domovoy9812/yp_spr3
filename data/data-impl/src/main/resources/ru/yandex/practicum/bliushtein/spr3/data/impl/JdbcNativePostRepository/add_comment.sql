@@ -1,0 +1,1 @@
+insert into comments (post, text) values (?, ?)

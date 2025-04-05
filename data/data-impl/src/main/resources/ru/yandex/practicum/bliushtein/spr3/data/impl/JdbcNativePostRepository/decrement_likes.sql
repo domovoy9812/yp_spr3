@@ -1,0 +1,1 @@
+update posts set likes = greatest(0, likes - 1) where id = ?

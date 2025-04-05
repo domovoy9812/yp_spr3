@@ -11,7 +11,7 @@ public interface PostRepository {
     List<Post> getAllPosts();
     List<String> getTags(UUID postId);
     int getCommentsCount(UUID postId);
-    List<Post> getPostByTag(String tag);
+    List<Post> getPostsByTag(String tag);
     List<Comment> getComments(UUID postId);
 
     Post getPost(UUID id);

@@ -1,0 +1,1 @@
+select * from comments where post = ? order by created_when desc

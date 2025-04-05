@@ -7,5 +7,5 @@ public interface FileStorage {
     UUID saveFile(InputStream file);
     void updateFile(UUID key, InputStream file);
     void deleteFile(UUID key);
-    InputStream getFileByKey(UUID key);
+    InputStream getFile(UUID key);
 }

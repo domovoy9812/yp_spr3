@@ -1,0 +1,1 @@
+insert into tags (post, name) values (?, ?)
