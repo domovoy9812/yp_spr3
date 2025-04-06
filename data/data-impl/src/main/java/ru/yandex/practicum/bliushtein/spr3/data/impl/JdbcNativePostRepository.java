@@ -165,13 +165,16 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public void deletePost(UUID id) {
-        checkPostExistence(id);
+        int deletedRowsCount;
         try {
-            jdbcTemplate.update(
+            deletedRowsCount = jdbcTemplate.update(
                     queryFinder.findQuery(DELETE_POST_QUERY_NAME, JdbcNativePostRepository.class),
                     id);
         } catch (Exception exception) {
             throw ExceptionBuilder.of("delete post", exception).withPostId(id).build();
+        }
+        if (deletedRowsCount == 0) {
+            throw ExceptionBuilder.incorrectInputParameters("delete post").withPostId(id).build();
         }
     }
 
@@ -227,6 +230,10 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public UUID createPost(String name, String fullText, String shortText, UUID imageKey) {
+        if (StringUtils.isBlank(name) || StringUtils.isBlank(fullText) || StringUtils.isBlank(shortText)) {
+            throw ExceptionBuilder.emptyInputParameters("create post")
+                    .withPostName(name).withFullText(fullText).withShortText(shortText).withImageId(imageKey).build();
+        }
         try {
             return jdbcTemplate.queryForObject(
                     queryFinder.findQuery(ADD_POST_QUERY_NAME, JdbcNativePostRepository.class),
@@ -240,13 +247,21 @@ public class JdbcNativePostRepository implements PostRepository {
 
     @Override
     public void updatePost(UUID id, String name, String fullText, String shortText, UUID imageKey) {
-        checkPostExistence(id);
+        if (StringUtils.isBlank(name) || StringUtils.isBlank(fullText) || StringUtils.isBlank(shortText)) {
+            throw ExceptionBuilder.emptyInputParameters("create post")
+                    .withPostName(name).withFullText(fullText).withShortText(shortText).withImageId(imageKey).build();
+        }
+        int updatedRowsCount;
         try {
-            jdbcTemplate.update(
+            updatedRowsCount = jdbcTemplate.update(
                     queryFinder.findQuery(UPDATE_POST_QUERY_NAME, JdbcNativePostRepository.class),
                     name, fullText, shortText, imageKey, id);
         } catch (Exception exception) {
             throw ExceptionBuilder.of("update post", exception).withPostId(id)
+                    .withPostName(name).withFullText(fullText).withShortText(shortText).withImageId(imageKey).build();
+        }
+        if (updatedRowsCount == 0) {
+            throw ExceptionBuilder.incorrectInputParameters("update post").withPostId(id)
                     .withPostName(name).withFullText(fullText).withShortText(shortText).withImageId(imageKey).build();
         }
     }

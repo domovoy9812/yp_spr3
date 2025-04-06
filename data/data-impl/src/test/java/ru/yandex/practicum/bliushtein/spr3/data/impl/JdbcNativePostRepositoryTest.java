@@ -3,6 +3,7 @@ package ru.yandex.practicum.bliushtein.spr3.data.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -262,9 +263,15 @@ public class JdbcNativePostRepositoryTest {
         assertThrows(DataAccessException.class,
                 () -> repository.createPost(null, NEW_POST_FULL_TEXT, NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
         assertThrows(DataAccessException.class,
+                () -> repository.createPost(StringUtils.EMPTY, NEW_POST_FULL_TEXT, NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
+        assertThrows(DataAccessException.class,
                 () -> repository.createPost(NEW_POST_NAME, null, NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
         assertThrows(DataAccessException.class,
+                () -> repository.createPost(NEW_POST_NAME, StringUtils.EMPTY, NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
+        assertThrows(DataAccessException.class,
                 () -> repository.createPost(NEW_POST_NAME, NEW_POST_FULL_TEXT, null, NEW_IMAGE_ID));
+        assertThrows(DataAccessException.class,
+                () -> repository.createPost(NEW_POST_NAME, NEW_POST_FULL_TEXT, StringUtils.EMPTY, NEW_IMAGE_ID));
     }
 
     @Test
@@ -287,10 +294,17 @@ public class JdbcNativePostRepositoryTest {
                 NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
         assertThrows(DataAccessException.class, () -> repository.updatePost(FIRST_POST_ID, null,
                 NEW_POST_FULL_TEXT, NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
+        assertThrows(DataAccessException.class, () -> repository.updatePost(FIRST_POST_ID, StringUtils.EMPTY,
+                NEW_POST_FULL_TEXT, NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
         assertThrows(DataAccessException.class, () -> repository.updatePost(FIRST_POST_ID, NEW_POST_NAME, null,
                 NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
         assertThrows(DataAccessException.class, () -> repository.updatePost(FIRST_POST_ID, NEW_POST_NAME,
+                StringUtils.EMPTY, NEW_POST_SHORT_TEXT, NEW_IMAGE_ID));
+        assertThrows(DataAccessException.class, () -> repository.updatePost(FIRST_POST_ID, NEW_POST_NAME,
                 NEW_POST_FULL_TEXT, null, NEW_IMAGE_ID));
+        assertThrows(DataAccessException.class, () -> repository.updatePost(FIRST_POST_ID, NEW_POST_NAME,
+                NEW_POST_FULL_TEXT, StringUtils.EMPTY, NEW_IMAGE_ID));
+
     }
 
     @Test
