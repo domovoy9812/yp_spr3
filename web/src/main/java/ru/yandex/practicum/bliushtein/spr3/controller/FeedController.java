@@ -28,8 +28,8 @@ public class FeedController {
                        @RequestParam(name = "pageSize", required = false, defaultValue = "50") int pageSize,
                        @RequestParam(name = "pageNumber", required = false, defaultValue = "0") int pageNumber) {
         String searchTag = (String) session.getAttribute("tag");
-        PagedListHolder<PostSummary> pagedPosts = (PagedListHolder<PostSummary>) session.getAttribute("posts");;
-        if (!Objects.equals(searchTag, tag) || pagedPosts == null) {
+        PagedListHolder<PostSummary> pagedPosts = (PagedListHolder<PostSummary>) session.getAttribute("posts");
+        if (needReloadPosts(tag, searchTag, pagedPosts)) {
             List<PostSummary> posts = StringUtils.isBlank(tag) ? service.findAll() : service.findByTag(tag);
             pagedPosts = new PagedListHolder<>(posts);
             session.setAttribute("posts", pagedPosts);
@@ -38,5 +38,9 @@ public class FeedController {
         pagedPosts.setPageSize(pageSize);
         pagedPosts.setPage(pageNumber);
         return "feed";
+    }
+
+    private static boolean needReloadPosts(String tag, String searchTag, PagedListHolder<PostSummary> posts) {
+        return !Objects.equals(searchTag, tag) || posts == null;
     }
 }

@@ -23,6 +23,7 @@ public class DbSchemaInitializer {
     private Resource createTablesScript;
     @Value("classpath:db/drop_db_tables.sql")
     private Resource dropTablesScript;
+
     @EventListener
     public void initSchema(ContextRefreshedEvent event) {
         if (createDbTablesOnStart) {

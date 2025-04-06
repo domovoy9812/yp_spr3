@@ -29,7 +29,7 @@ public class ThymeleafConfiguration {
     }
 
     @Bean
-    public ViewResolver viewResolver(SpringTemplateEngine templateEngine) {
+    public ViewResolver thymeleafViewResolver(SpringTemplateEngine templateEngine) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine);
         resolver.setCharacterEncoding("UTF-8");
