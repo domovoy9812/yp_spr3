@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
         List<String> tags = postRepository.getTags(post.getId());
         int commentsCount = postRepository.getCommentsCount(post.getId());
         return new PostSummary(post.getId(), post.getName(), post.getShortText(), post.getCreatedWhen(),
-                post.getLikesCount(), tags, commentsCount, post.getImageKey());
+                post.getLikesCount(), tags, commentsCount, post.getImageId());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
         List<Comment> comments = postRepository.getComments(id);
         return new PostDetails(post.getId(), post.getName(), post.getShortText(), post.getFullText(),
                 post.getCreatedWhen(), post.getLikesCount(), tags,
-                transformCommentsToCommentInfos(comments), post.getImageKey());
+                transformCommentsToCommentInfos(comments), post.getImageId());
     }
 
     private List<CommentInfo> transformCommentsToCommentInfos(List<Comment> comments) {

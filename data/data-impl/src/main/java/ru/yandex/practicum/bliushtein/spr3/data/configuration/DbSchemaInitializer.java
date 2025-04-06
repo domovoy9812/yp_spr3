@@ -13,18 +13,24 @@ import javax.sql.DataSource;
 @Component
 public class DbSchemaInitializer {
 
-    @Value("${spring.datasource.init_on_start}")
-    private boolean enabled;
+    @Value("${spring.datasource.create-db-tables-on-start}")
+    private boolean createDbTablesOnStart;
+    @Value("${spring.datasource.drop-db-tables-on-start}")
+    private boolean dropDbTablesOnStart;
     @Autowired
     private DataSource dataSource;
-    @Value("classpath:init_db/schema.sql")
-    private Resource initScript;
-
+    @Value("classpath:db/create_db_tables.sql")
+    private Resource createTablesScript;
+    @Value("classpath:db/drop_db_tables.sql")
+    private Resource dropTablesScript;
     @EventListener
     public void initSchema(ContextRefreshedEvent event) {
-        if (enabled) {
+        if (createDbTablesOnStart) {
             ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-            populator.addScript(initScript);
+            if (dropDbTablesOnStart) {
+                populator.addScript(dropTablesScript);
+            }
+            populator.addScript(createTablesScript);
             populator.execute(dataSource);
         }
     }

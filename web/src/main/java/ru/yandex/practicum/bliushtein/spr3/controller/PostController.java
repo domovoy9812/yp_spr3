@@ -67,7 +67,7 @@ public class PostController {
 
     @PostMapping("/create")
     public String createPost(Model model,
-                             @RequestParam("tag") List<String> tags,
+                             @RequestParam(value = "tag", required = false) List<String> tags,
                              @RequestParam(value = "image", required = false) MultipartFile image,
                              @RequestParam("text") String fullText,
                              @RequestParam("name") String name) throws IOException {
