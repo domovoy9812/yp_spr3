@@ -1,4 +1,3 @@
---gen_random_uuid() to generate new id
 delete from posts;
 insert into posts (id, name, full_text, short_text, likes, image_key)
 values

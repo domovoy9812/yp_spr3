@@ -1,9 +1,11 @@
 package ru.yandex.practicum.bliushtein.spr3.data.repository.impl;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.bliushtein.spr3.data.exceptions.ExceptionBuilder;
 import ru.yandex.practicum.bliushtein.spr3.data.repository.FileStorage;
 
 import java.io.InputStream;
@@ -33,21 +35,34 @@ public class JdbcFileStorage implements FileStorage {
 
     @Override
     public UUID saveFile(InputStream file) {
-        return jdbcTemplate.query(
-                queryFinder.findQuery(SAVE_FILE_QUERY_NAME, JdbcFileStorage.class),
-                ps -> ps.setBinaryStream(1, file),
-                idMapper
-        ).getFirst();
+        if (file == null) {
+            throw ExceptionBuilder.emptyInputParameters("save file").withEmptyFile().build();
+        }
+        try (var localFile = file) {
+            return jdbcTemplate.query(
+                    queryFinder.findQuery(SAVE_FILE_QUERY_NAME, JdbcFileStorage.class),
+                    ps -> ps.setBinaryStream(1, localFile),
+                    idMapper
+            ).getFirst();
+        } catch (Exception exception) {
+            throw ExceptionBuilder.of("save file", exception).build();
+        }
     }
 
     @Override
     public void updateFile(UUID id, InputStream file) {
-        jdbcTemplate.update(
-                queryFinder.findQuery(UPDATE_FILE_QUERY_NAME, JdbcFileStorage.class),
-                ps -> {
-                    ps.setBinaryStream(1, file);
-                    ps.setObject(2, id);
-                });
+        if (file == null) {
+            throw ExceptionBuilder.emptyInputParameters("update file").withEmptyFile().build();
+        } else try (var localFile = file) {
+            jdbcTemplate.update(
+                    queryFinder.findQuery(UPDATE_FILE_QUERY_NAME, JdbcFileStorage.class),
+                    ps -> {
+                        ps.setBinaryStream(1, localFile);
+                        ps.setObject(2, id);
+                    });
+        } catch (Exception exception) {
+            throw ExceptionBuilder.of("update file", exception).build();
+        }
     }
 
     @Override
@@ -59,9 +74,16 @@ public class JdbcFileStorage implements FileStorage {
 
     @Override
     public InputStream getFile(UUID id) {
-        return jdbcTemplate.queryForObject(
-                queryFinder.findQuery(GET_FILE_QUERY_NAME, JdbcFileStorage.class),
-                binaryStreamMapper,
-                id);
+        if (id == null) {
+            return null;
+        }
+        try {
+            return jdbcTemplate.queryForObject(
+                    queryFinder.findQuery(GET_FILE_QUERY_NAME, JdbcFileStorage.class),
+                    binaryStreamMapper,
+                    id);
+        } catch (EmptyResultDataAccessException exception) {
+            return null;
+        }
     }
 }

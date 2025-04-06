@@ -62,7 +62,7 @@ public class JdbcNativePostRepositoryTest {
     private static final String NEW_POST_SHORT_TEXT = "short text";
     private static final UUID NEW_IMAGE_ID = UUID.fromString("2fc4ea9d-a12d-4a6f-9aaf-79585e3f9a71");
 
-    @Value("classpath:db/init_test_data.sql")
+    @Value("classpath:db/init_test_data_for_post_repository.sql")
     private Resource initTestDataScript;
 
     @Autowired
@@ -337,4 +337,6 @@ public class JdbcNativePostRepositoryTest {
                 Collections.singletonList(FIRST_TAG_NAME)));
         assertThrows(DataAccessException.class, () -> repository.deleteTags(INCORRECT_ID,
                 Collections.singletonList(FIRST_TAG_NAME)));
-    }}
+    }
+
+}

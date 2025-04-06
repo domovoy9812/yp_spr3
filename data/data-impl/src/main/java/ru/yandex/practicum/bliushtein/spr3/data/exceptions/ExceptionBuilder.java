@@ -126,4 +126,8 @@ public class ExceptionBuilder {
         return Objects.toString(value, StringUtils.EMPTY);
     }
 
+    public ExceptionBuilder withEmptyFile() {
+        params.put("file", StringUtils.EMPTY);
+        return this;
+    }
 }
