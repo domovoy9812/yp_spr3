@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.spr3.data.impl.mappers;
+package ru.yandex.practicum.bliushtein.spr3.data.repository.impl.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.spr3.data.impl;
+package ru.yandex.practicum.bliushtein.spr3.data.repository.impl;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.spr3.data.impl;
+package ru.yandex.practicum.bliushtein.spr3.data.repository.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;

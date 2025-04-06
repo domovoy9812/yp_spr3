@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.spr3.data.impl;
+package ru.yandex.practicum.bliushtein.spr3.data.repository.impl;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
