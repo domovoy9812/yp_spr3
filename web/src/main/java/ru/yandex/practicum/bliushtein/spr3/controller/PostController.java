@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.bliushtein.spr3.service.PostService;
-import ru.yandex.practicum.bliushtein.spr3.service.dto.ImageInfo;
+import ru.yandex.practicum.bliushtein.spr3.service.dto.ImageOperation;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.PostDetails;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class PostController {
     @PostMapping("/{id}/delete")
     public String deletePost(@PathVariable("id") UUID id,
                              @RequestParam(value = "image_key", required = false) UUID imageKey) {
-        service.deletePost(id, SpringImageInfo.forDelete(imageKey));
+        service.deletePost(id, SpringImageOperation.forDelete(imageKey));
         return "redirect:/feed";
     }
 
@@ -58,8 +58,8 @@ public class PostController {
                              @RequestParam(value = "image_key", required = false) UUID imageKey,
                              @RequestParam("text") String fullText,
                              @RequestParam("name") String name) {
-        ImageInfo imageInfo = SpringImageInfo.forUpdate(image, imageKey);
-        service.updatePost(id, name, fullText, tags, imageInfo);
+        ImageOperation imageOperation = SpringImageOperation.forUpdate(image, imageKey);
+        service.updatePost(id, name, fullText, tags, imageOperation);
         PostDetails post = service.getPostDetails(id);
         model.addAttribute("post", post);
         return "redirect:/post/" + id;
@@ -71,8 +71,8 @@ public class PostController {
                              @RequestParam(value = "image", required = false) MultipartFile image,
                              @RequestParam("text") String fullText,
                              @RequestParam("name") String name) throws IOException {
-        ImageInfo imageInfo = SpringImageInfo.forCreate(image);
-        UUID id = service.createPost(name, fullText, tags, imageInfo);
+        ImageOperation imageOperation = SpringImageOperation.forCreate(image);
+        UUID id = service.createPost(name, fullText, tags, imageOperation);
         PostDetails post = service.getPostDetails(id);
         model.addAttribute("post", post);
         return "redirect:/post/" + id;

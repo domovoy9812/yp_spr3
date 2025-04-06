@@ -6,16 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.bliushtein.spr3.data.model.Comment;
 import ru.yandex.practicum.bliushtein.spr3.data.model.Post;
-import ru.yandex.practicum.bliushtein.spr3.data.repository.FileStorage;
 import ru.yandex.practicum.bliushtein.spr3.data.repository.PostRepository;
+import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
 import ru.yandex.practicum.bliushtein.spr3.service.PostService;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.CommentInfo;
-import ru.yandex.practicum.bliushtein.spr3.service.dto.ImageInfo;
+import ru.yandex.practicum.bliushtein.spr3.service.dto.ImageOperation;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.PostDetails;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.PostSummary;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -25,10 +23,11 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final FileStorage fileStorage;
-    public PostServiceImpl(PostRepository postRepository, FileStorage fileStorage) {
+    private final ImageService imageService;
+
+    public PostServiceImpl(PostRepository postRepository, ImageService imageService) {
         this.postRepository = postRepository;
-        this.fileStorage = fileStorage;
+        this.imageService = imageService;
     }
 
     @Override
@@ -68,31 +67,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public UUID createPost(String name, String fullText, List<String> tags, ImageInfo imageInfo) {
-        UUID imageKey = processImage(imageInfo);
+    public UUID createPost(String name, String fullText, List<String> tags, ImageOperation imageOperation) {
+        UUID imageKey = imageService.processImage(imageOperation);
         UUID id = postRepository.createPost(name, fullText, getShortText(fullText), imageKey);
         createTags(id, tags);
         return id;
-    }
-
-    private UUID processImage(ImageInfo imageInfo) {
-        try {
-            return switch (imageInfo.getAction()) {
-                case ADD -> fileStorage.saveFile(imageInfo.getInputStream());
-                case SAME -> imageInfo.getKey();
-                case DELETE -> {
-                    fileStorage.deleteFile(imageInfo.getKey());
-                    yield null;
-                }
-                case UPDATE -> {
-                    fileStorage.updateFile(imageInfo.getKey(), imageInfo.getInputStream());
-                    yield imageInfo.getKey();
-                }
-            };
-        } catch (IOException exception) {
-            //TODO add correct exception class
-            throw new RuntimeException("Unable to process image file");
-        }
     }
 
     private static String getShortText(String fullText) {
@@ -113,8 +92,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void updatePost(UUID id, String name, String fullText, List<String> tags, ImageInfo imageInfo) {
-        UUID imageKey = processImage(imageInfo);
+    public void updatePost(UUID id, String name, String fullText, List<String> tags, ImageOperation imageOperation) {
+        UUID imageKey = imageService.processImage(imageOperation);
         postRepository.updatePost(id, name, fullText, getShortText(fullText), imageKey);
         List<String> storedTags = postRepository.getTags(id);
         Collection<String> addedTags = CollectionUtils.subtract(tags, storedTags);
@@ -135,28 +114,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePost(UUID id, ImageInfo imageInfo) {
-        processImage(imageInfo);
+    public void deletePost(UUID id, ImageOperation imageOperation) {
+        imageService.processImage(imageOperation);
         postRepository.deletePost(id);
     }
 
-    @Override
-    public void addComment(UUID postId, String text) {
-        postRepository.addComment(postId, text);
-    }
 
-    @Override
-    public void deleteComment(UUID commentId) {
-        postRepository.deleteComment(commentId);
-    }
-
-    @Override
-    public void updateComment(UUID commentId, String text) {
-        postRepository.updateComment(commentId, text);
-    }
-
-    @Override
-    public InputStream getImageByKey(UUID key) {
-        return fileStorage.getFile(key);
-    }
 }

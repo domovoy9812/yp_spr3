@@ -5,16 +5,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.yandex.practicum.bliushtein.spr3.service.PostService;
+import ru.yandex.practicum.bliushtein.spr3.service.CommentService;
 
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/post/{postId}/comment")
 public class CommentController {
-    private final PostService service;
+    private final CommentService service;
 
-    CommentController(PostService service) {
+    CommentController(CommentService service) {
         this.service = service;
     }
 

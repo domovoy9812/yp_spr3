@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.yandex.practicum.bliushtein.spr3.service.PostService;
+import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -14,9 +14,9 @@ import java.util.UUID;
 @RequestMapping("/image")
 public class ImageController {
 
-    private final PostService service;
+    private final ImageService service;
 
-    public ImageController(PostService service) {
+    public ImageController(ImageService service) {
         this.service = service;
     }
 
