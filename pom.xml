@@ -9,6 +9,13 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <tomcat.url>http://localhost:8080</tomcat.url>
+  </properties>
+
   <name>bliushtein_sprint3</name>
   <modules>
     <module>data</module>

@@ -15,12 +15,6 @@
   <packaging>war</packaging>
 
   <name>web</name>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <tomcat.deploy.url>http://localhost:8080/manager/text</tomcat.deploy.url>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -90,7 +84,7 @@
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <configuration>
-          <url>${tomcat.deploy.url}</url>
+          <url>${tomcat.url}/manager/text</url>
           <server>TomcatServer</server>
           <path>/${project.parent.artifactId}</path>
         </configuration>
