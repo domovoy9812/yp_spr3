@@ -47,7 +47,7 @@
 <body>
 <!-- Вместо href ссылка на ленту постов -->
 <a th:href="@{/feed}" style="float:right;">
-    <b>НА ГЛАВНУЮ &cudarrr;</b>
+    <b>НА ГЛАВНУЮ</b>
 </a>
 <!-- Вместо action ссылка на форму добавления или редактирования поста -->
 <form method="POST" th:action="${post.id == null} ? @{/post/create} : @{/post/{id}/edit(id=${post.id})}" enctype="multipart/form-data">
@@ -56,17 +56,17 @@
             <td>
                 <h3>Название</h3>
                 <!-- Вместо text название поста для формы редактирования или пустая строка для формы добавления -->
-                <textarea rows="2" style="width: 100%;" name="name" th:text="${post.name}"></textarea>
+                <textarea rows="2" style="width: 100%;" name="name" th:text="${post.name}" required="required"></textarea>
             </td>
         </tr>
         <tr>
             <td>
                 <h3>Изображение</h3>
                 <p>
-                    <img height="100" th:src="@{/image/{key}(key=${post.imageKey})}">
+                    <img height="100" th:src="@{/image/{key}(key=${post.imageKey})}"/>
                 </p>
-                <input type="file" name="image">
-                <input type="hidden" name="image_key" th:value="${post.imageKey}">
+                <input type="file" name="image"/>
+                <input type="hidden" name="image_key" th:value="${post.imageKey}"/>
             </td>
         </tr>
         <tr>
@@ -76,7 +76,7 @@
         </tr>
         <tr th:each="tag : ${post.tags}">
             <td>
-                <input type="text" readonly name="tag" th:value="${tag}"/>
+                <input type="text" readonly="readonly" name="tag" th:value="${tag}"/>
                 <button onclick="removeTag(this)">&#10007;</button>
             </td>
         </tr>
@@ -90,7 +90,7 @@
             <td>
                 <h3>Текст</h3>
                 <!-- Вместо text текст поста для формы редактирования или пустая строка для формы добавления -->
-                <textarea rows="30" style="width: 100%;" name="text" th:text="${post.fullText}"></textarea>
+                <textarea rows="30" style="width: 100%;" name="text" th:text="${post.fullText}" required="required"></textarea>
             </td>
         </tr>
         <tr>
@@ -101,3 +101,4 @@
     </table>
 </form>
 </body>
+</html>

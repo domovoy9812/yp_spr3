@@ -8,7 +8,7 @@ import ru.yandex.practicum.bliushtein.spr3.service.PostService;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.ImageOperation;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.PostDetails;
 
-import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ public class PostController {
 
     private final PostService service;
 
-    PostController(PostService service) {
+    public PostController(PostService service) {
         this.service = service;
     }
 
@@ -46,35 +46,29 @@ public class PostController {
 
     @GetMapping("/new")
     public String newPost(Model model) {
-        model.addAttribute("post", new PostDetails());
+        model.addAttribute("post", PostDetails.EMPTY);
         return "add-post";
     }
 
     @PostMapping("/{id}/edit")
-    public String updatePost(Model model,
-                             @PathVariable(name = "id") UUID id,
-                             @RequestParam("tag") List<String> tags,
+    public String updatePost(@PathVariable(name = "id") UUID id,
+                             @RequestParam(value = "tag", required = false) List<String> tags,
                              @RequestParam(value = "image", required = false) MultipartFile image,
                              @RequestParam(value = "image_key", required = false) UUID imageKey,
                              @RequestParam("text") String fullText,
                              @RequestParam("name") String name) {
         ImageOperation imageOperation = SpringImageOperation.forUpdate(image, imageKey);
-        service.updatePost(id, name, fullText, tags, imageOperation);
-        PostDetails post = service.getPostDetails(id);
-        model.addAttribute("post", post);
+        service.updatePost(id, name, fullText, tags == null ? Collections.emptyList() : tags, imageOperation);
         return "redirect:/post/" + id;
     }
 
     @PostMapping("/create")
-    public String createPost(Model model,
-                             @RequestParam(value = "tag", required = false) List<String> tags,
+    public String createPost(@RequestParam(value = "tag", required = false) List<String> tags,
                              @RequestParam(value = "image", required = false) MultipartFile image,
                              @RequestParam("text") String fullText,
-                             @RequestParam("name") String name) throws IOException {
+                             @RequestParam("name") String name) {
         ImageOperation imageOperation = SpringImageOperation.forCreate(image);
-        UUID id = service.createPost(name, fullText, tags, imageOperation);
-        PostDetails post = service.getPostDetails(id);
-        model.addAttribute("post", post);
+        UUID id = service.createPost(name, fullText, tags == null ? Collections.emptyList() : tags, imageOperation);
         return "redirect:/post/" + id;
     }
 

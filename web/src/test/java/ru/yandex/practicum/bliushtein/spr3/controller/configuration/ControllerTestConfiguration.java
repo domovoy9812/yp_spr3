@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Primary;
 import ru.yandex.practicum.bliushtein.spr3.configuration.ThymeleafConfiguration;
 import ru.yandex.practicum.bliushtein.spr3.controller.FeedController;
 import ru.yandex.practicum.bliushtein.spr3.controller.ImageController;
+import ru.yandex.practicum.bliushtein.spr3.controller.PostController;
 import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
 import ru.yandex.practicum.bliushtein.spr3.service.PostService;
 
@@ -37,5 +38,11 @@ public class ControllerTestConfiguration {
     @Primary
     public ImageService imageService() {
         return Mockito.mock(ImageService.class);
+    }
+
+    @Bean
+    @Primary
+    public PostController postController(PostService service) {
+        return new PostController(service);
     }
 }

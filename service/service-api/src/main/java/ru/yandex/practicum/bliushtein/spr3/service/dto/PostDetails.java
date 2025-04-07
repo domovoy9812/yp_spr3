@@ -9,10 +9,11 @@ import java.util.UUID;
 
 public class PostDetails extends PostSummary {
 
+    public final static PostDetails EMPTY = new PostDetails();
     private String fullText;
     private List<CommentInfo> comments;
 
-    public PostDetails() {
+    private PostDetails() {
         super(null, StringUtils.EMPTY, StringUtils.EMPTY, null, 0, Collections.emptyList(),
                 0, null);
         this.fullText = StringUtils.EMPTY;

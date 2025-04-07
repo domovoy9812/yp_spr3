@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class SpringImageOperation implements ImageOperation {
 
-    private static final SpringImageOperation SAME_IMAGE_INFO = new SpringImageOperation(null, null, Action.SAME);
+    public static final SpringImageOperation SAME_IMAGE_INFO = new SpringImageOperation(null, null, Action.SAME);
 
     public static SpringImageOperation forDelete(UUID imageKey) {
         if (imageKey != null) {
