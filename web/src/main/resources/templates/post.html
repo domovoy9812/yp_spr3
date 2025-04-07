@@ -75,7 +75,6 @@
                         <span th:text="${post.likesCount}"></span>
                         <!-- Уменьшение -->
                         <button name="like" value="false">&#128078;</button>
-                        <span th:text="${post.commentsCount}" style="float:right;"></span>
                     </form>
                 </p>
                 <p>
@@ -93,7 +92,7 @@
         </tr>
         <tr>
             <td>
-                <h2>Комментарии</h2>
+                <h2 th:text="${'Комментарии(' +post.commentsCount + ')'}"></h2>
             </td>
         </tr>
         <!-- В each итерируемся по комментариям поста -->

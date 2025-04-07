@@ -59,11 +59,13 @@
                 </p>
                 <p th:text="${post.shortText}"></p>
                 <p>
-                    <span th:text="${post.likesCount}"></span>
-                    <span th:text="${post.commentsCount}"></span>
+                    <span th:text="${'количество лайков:' + post.likesCount}"></span>
                 </p>
                 <p>
-                    <span th:text="${post.createdWhen}"></span>
+                    <span th:text="${'количество комментариев:' + post.commentsCount}"></span>
+                </p>
+                <p>
+                    <span th:text="${'дата публикации:' + #temporals.format(post.createdWhen, 'dd-MM-yyyy HH:mm:ss')}"></span>
                 </p>
                 <p>
                     <span th:each="tag : ${post.tags}" th:text="${'#' + tag}"></span>
