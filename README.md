@@ -29,13 +29,13 @@ https://github.com/domovoy9812/yp_spr3.git
 | spring.datasource.drop-db-tables-on-start   | нужно ли удалять старые версии таблиц<br/> (используется только если spring.datasource.create-db-tables-on-start=true) | false                                                     |
 2. [test-application.properties](./data/data-impl/src/test/resources/test-application.properties) содержит те же параметры, используется для запуска интеграционных тестов
 
-| параметр                                    | описание                                                                                                               | значение[README.md](README.md) по умолчанию                                     |
-|---------------------------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
+| параметр                                    | описание                                                                                                               | значение по умолчанию                                          |
+|---------------------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
 | spring.datasource.url                       | строка подключения к тестовой БД                                                                                       | jdbc:postgresql://localhost:5432/bliushtein_yp_sprint3_test_db |
-| spring.datasource.username                  | имя пользователя для подключения к тестовой БД                                                                         | bliushtein_yp_sprint3                                     |
-| spring.datasource.password                  | пароль                                                                                                                 | 12345                                                     |
-| spring.datasource.create-db-tables-on-start | нужно ли создавать необходимые таблицы в БД если они не существуют                                                     | true                                                      |
-| spring.datasource.drop-db-tables-on-start   | нужно ли удалять старые версии таблиц<br/> (используется только если spring.datasource.create-db-tables-on-start=true) | true                                                     |
+| spring.datasource.username                  | имя пользователя для подключения к тестовой БД                                                                         | bliushtein_yp_sprint3                                          |
+| spring.datasource.password                  | пароль                                                                                                                 | 12345                                                          |
+| spring.datasource.create-db-tables-on-start | нужно ли создавать необходимые таблицы в БД если они не существуют                                                     | true                                                           |
+| spring.datasource.drop-db-tables-on-start   | нужно ли удалять старые версии таблиц<br/> (используется только если spring.datasource.create-db-tables-on-start=true) | true                                                           |
 3. Настройки развертывания приложений в Tomcat
 + [pom.xml](./pom.xml) свойство **tomcat.url** - URL сервера Tomcat
 + settings.xml должен содержать секцию ниже, где {user}/{password} имя и пароль пользователя Tomcat с правами на автоматическое развертывание приложений
