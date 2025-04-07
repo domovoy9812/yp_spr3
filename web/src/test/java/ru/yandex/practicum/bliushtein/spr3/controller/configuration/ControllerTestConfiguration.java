@@ -9,7 +9,7 @@ import ru.yandex.practicum.bliushtein.spr3.configuration.ThymeleafConfiguration;
 import ru.yandex.practicum.bliushtein.spr3.controller.FeedController;
 import ru.yandex.practicum.bliushtein.spr3.controller.ImageController;
 import ru.yandex.practicum.bliushtein.spr3.controller.PostController;
-import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
+import ru.yandex.practicum.bliushtein.spr3.service.GetImageService;
 import ru.yandex.practicum.bliushtein.spr3.service.PostService;
 
 @Configuration
@@ -30,14 +30,14 @@ public class ControllerTestConfiguration {
 
     @Bean
     @Primary
-    public ImageController imageController(ImageService service) {
+    public ImageController imageController(GetImageService service) {
         return new ImageController(service);
     }
 
     @Bean
     @Primary
-    public ImageService imageService() {
-        return Mockito.mock(ImageService.class);
+    public GetImageService imageService() {
+        return Mockito.mock(GetImageService.class);
     }
 
     @Bean

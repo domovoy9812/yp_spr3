@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.yandex.practicum.bliushtein.spr3.controller.configuration.ControllerTestConfiguration;
-import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
+import ru.yandex.practicum.bliushtein.spr3.service.GetImageService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,7 +32,7 @@ public class ImageControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @Autowired
-    private ImageService imageServiceMock;
+    private GetImageService imageServiceMock;
 
     @Value("classpath:image/test_image_1.png")
     private Resource inputImage;

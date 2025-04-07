@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.bliushtein.spr3.data.model.Comment;
 import ru.yandex.practicum.bliushtein.spr3.data.model.Post;
 import ru.yandex.practicum.bliushtein.spr3.data.repository.PostRepository;
-import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
+import ru.yandex.practicum.bliushtein.spr3.service.UpdateImageService;
 import ru.yandex.practicum.bliushtein.spr3.service.PostService;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.CommentInfo;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.ImageOperation;
@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final ImageService imageService;
+    private final UpdateImageService imageService;
 
-    public PostServiceImpl(PostRepository postRepository, ImageService imageService) {
+    public PostServiceImpl(PostRepository postRepository, UpdateImageService imageService) {
         this.postRepository = postRepository;
         this.imageService = imageService;
     }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
+import ru.yandex.practicum.bliushtein.spr3.service.GetImageService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +20,9 @@ public class ImageController {
     @Value("classpath:image/default_image.png")
     Resource defaultImage;
 
-    private final ImageService service;
+    private final GetImageService service;
 
-    public ImageController(ImageService service) {
+    public ImageController(GetImageService service) {
         this.service = service;
     }
 

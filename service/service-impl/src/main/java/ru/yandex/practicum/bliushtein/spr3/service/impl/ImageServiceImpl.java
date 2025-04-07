@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.bliushtein.spr3.data.repository.FileStorage;
 import ru.yandex.practicum.bliushtein.spr3.service.ImageService;
 import ru.yandex.practicum.bliushtein.spr3.service.dto.ImageOperation;
+import ru.yandex.practicum.bliushtein.spr3.service.exceptions.ProcessImageException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,8 +40,7 @@ public class ImageServiceImpl implements ImageService {
                 }
             };
         } catch (IOException exception) {
-            //TODO add correct exception class
-            throw new RuntimeException("Unable to process image file");
+            throw new ProcessImageException("Unable to process image file", exception);
         }
     }
 }
