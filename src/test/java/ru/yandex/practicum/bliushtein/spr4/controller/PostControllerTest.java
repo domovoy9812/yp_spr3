@@ -1,17 +1,10 @@
 package ru.yandex.practicum.bliushtein.spr4.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import ru.yandex.practicum.bliushtein.spr4.controller.configuration.ControllerTestConfiguration;
 import ru.yandex.practicum.bliushtein.spr4.service.PostService;
 import ru.yandex.practicum.bliushtein.spr4.service.dto.ImageOperation;
 import ru.yandex.practicum.bliushtein.spr4.service.dto.PostDetails;
@@ -21,28 +14,14 @@ import static ru.yandex.practicum.bliushtein.spr4.controller.configuration.TestD
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(SpringExtension.class)
-@ExtendWith(MockitoExtension.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = ControllerTestConfiguration.class)
+@WebMvcTest(PostController.class)
 public class PostControllerTest {
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
+    @MockitoBean
     private PostService postServiceMock;
 
     @Autowired
-    private PostController controller;
     private MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        reset(postServiceMock);
-    }
-
     @Test
     void testShowPost() throws Exception {
         when(postServiceMock.getPostDetails(POST_ID)).thenReturn(POST_DETAILS);

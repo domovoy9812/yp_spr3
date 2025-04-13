@@ -6,9 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import ru.yandex.practicum.bliushtein.spr4.data.repository.PostRepository;
 import ru.yandex.practicum.bliushtein.spr4.service.PostService;
 import ru.yandex.practicum.bliushtein.spr4.service.UpdateImageService;
@@ -16,7 +15,6 @@ import ru.yandex.practicum.bliushtein.spr4.service.dto.CommentInfo;
 import ru.yandex.practicum.bliushtein.spr4.service.dto.ImageOperation;
 import ru.yandex.practicum.bliushtein.spr4.service.dto.PostDetails;
 import ru.yandex.practicum.bliushtein.spr4.service.dto.PostSummary;
-import ru.yandex.practicum.bliushtein.spr4.service.impl.configuration.ServiceTestConfiguration;
 
 import java.util.List;
 
@@ -25,18 +23,16 @@ import static ru.yandex.practicum.bliushtein.spr4.service.impl.configuration.Tes
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = ServiceTestConfiguration.class)
+@SpringBootTest(classes = {PostServiceImpl.class})
 public class PostServiceImplTest {
 
     @Autowired
     private PostService postService;
 
-    @Autowired
+    @MockitoBean
     private PostRepository postRepositoryMock;
 
-    @Autowired
-    @Qualifier("updateImageService")
+    @MockitoBean
     private UpdateImageService imageServiceMock;
 
     @Mock
@@ -44,7 +40,7 @@ public class PostServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        reset(postRepositoryMock, imageServiceMock, imageOperationMock);
+        reset(imageOperationMock);
     }
 
     @Test

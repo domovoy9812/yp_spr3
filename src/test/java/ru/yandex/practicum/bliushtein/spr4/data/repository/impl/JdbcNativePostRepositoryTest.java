@@ -5,30 +5,22 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import ru.yandex.practicum.bliushtein.spr4.data.repository.DataAccessException;
 import ru.yandex.practicum.bliushtein.spr4.data.model.Comment;
 import ru.yandex.practicum.bliushtein.spr4.data.model.Post;
 import ru.yandex.practicum.bliushtein.spr4.data.repository.PostRepository;
 
-import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestConfiguration.class)
-@TestPropertySource("classpath:test-application.properties")
-@Tag("Integration")
+@SpringBootTest
+@ActiveProfiles("test")
 public class JdbcNativePostRepositoryTest {
 
     private static final int INITIAL_POSTS_COUNT = 3;
@@ -62,20 +54,15 @@ public class JdbcNativePostRepositoryTest {
     private static final String NEW_POST_SHORT_TEXT = "short text";
     private static final UUID NEW_IMAGE_ID = UUID.fromString("2fc4ea9d-a12d-4a6f-9aaf-79585e3f9a71");
 
-    @Value("classpath:db/init_test_data_for_post_repository.sql")
-    private Resource initTestDataScript;
-
     @Autowired
     PostRepository repository;
 
     @Autowired
-    private DataSource dataSource;
+    private AbstractScriptDatabaseInitializer dbInitializer;
 
     @BeforeEach
     void setUp() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(initTestDataScript);
-        populator.execute(dataSource);
+        dbInitializer.initializeDatabase();
     }
 
     @Test

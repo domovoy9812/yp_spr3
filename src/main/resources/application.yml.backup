@@ -1,0 +1,24 @@
+spring:
+    application:
+        name: bliushtein_sprint4
+    datasource:
+        url: jdbc:postgresql://localhost:5432/bliushtein_yp_sprint4_db
+        username: bliushtein_yp_sprint4
+        password: 12345
+    sql:
+        init:
+            mode: always
+            schema-locations: classpath:/db/schema.sql
+management:
+    endpoints:
+        web:
+            exposure:
+                include: *
+    endpoint:
+        health:
+            probes:
+                enabled: true
+            group:
+                readiness:
+                    include: readinessState
+                    show-details: always

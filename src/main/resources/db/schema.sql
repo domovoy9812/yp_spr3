@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS public.binary_storage
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.binary_storage
-    OWNER to bliushtein_yp_sprint3;
+    OWNER to bliushtein_yp_sprint4;
 
 -- Table: public.posts
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.posts
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.posts
-    OWNER to bliushtein_yp_sprint3;
+    OWNER to bliushtein_yp_sprint4;
 
 -- Table: public.comments
 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS public.comments
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.comments
-    OWNER to bliushtein_yp_sprint3;
+    OWNER to bliushtein_yp_sprint4;
 -- Index: fki_post_fk
 
 -- DROP INDEX IF EXISTS public.fki_post_fk;
@@ -84,4 +84,4 @@ CREATE TABLE IF NOT EXISTS public.tags
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.tags
-    OWNER to bliushtein_yp_sprint3;
+    OWNER to bliushtein_yp_sprint4;

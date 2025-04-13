@@ -7,12 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import ru.yandex.practicum.bliushtein.spr4.data.repository.FileStorage;
 import ru.yandex.practicum.bliushtein.spr4.service.ImageService;
 import ru.yandex.practicum.bliushtein.spr4.service.dto.ImageOperation;
-import ru.yandex.practicum.bliushtein.spr4.service.impl.configuration.ServiceTestConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,13 +20,12 @@ import java.util.UUID;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = ServiceTestConfiguration.class)
+@SpringBootTest(classes = {ImageServiceImpl.class})
 public class ImageServiceImplTest {
 
     private final static UUID IMAGE_ID = new UUID(0, 0);
 
-    @Autowired
+    @MockitoBean
     private FileStorage fileStorageMock;
 
     @Mock
@@ -41,7 +39,7 @@ public class ImageServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        reset(fileStorageMock, operationMock);
+        reset(operationMock);
     }
 
     @Test

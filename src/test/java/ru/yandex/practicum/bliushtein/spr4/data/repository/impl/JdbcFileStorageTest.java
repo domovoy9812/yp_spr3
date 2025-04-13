@@ -2,24 +2,19 @@ package ru.yandex.practicum.bliushtein.spr4.data.repository.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import static org.mockito.Mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ActiveProfiles;
 import ru.yandex.practicum.bliushtein.spr4.data.repository.DataAccessException;
 import ru.yandex.practicum.bliushtein.spr4.data.repository.FileStorage;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -27,19 +22,11 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.UUID;
 
-@ExtendWith(SpringExtension.class)
-@ExtendWith(MockitoExtension.class)
-@ContextConfiguration(classes = TestConfiguration.class)
-@TestPropertySource("classpath:test-application.properties")
+@SpringBootTest
+@ActiveProfiles("test")
 public class JdbcFileStorageTest {
 
     private final static UUID NOT_EXISTING_FILE_ID = new UUID(0, 0);
-
-    @Autowired
-    private DataSource dataSource;
-
-    @Value("classpath:db/cleanup_test_data_for_file_storage.sql")
-    private Resource cleanupTestDataScript;
 
     @Autowired
     private FileStorage fileStorage;
@@ -50,12 +37,12 @@ public class JdbcFileStorageTest {
     @Value("classpath:image/test_image_2.png")
     private Resource inputImage2;
 
+    @Autowired
+    private AbstractScriptDatabaseInitializer dbInitializer;
+
     @BeforeEach
-    @AfterEach
-    void resetTestData() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(cleanupTestDataScript);
-        populator.execute(dataSource);
+    void setUp() {
+        dbInitializer.initializeDatabase();
     }
 
     @Test

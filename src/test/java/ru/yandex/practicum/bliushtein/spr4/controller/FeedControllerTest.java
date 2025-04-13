@@ -3,18 +3,12 @@ package ru.yandex.practicum.bliushtein.spr4.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import ru.yandex.practicum.bliushtein.spr4.controller.configuration.ControllerTestConfiguration;
 import ru.yandex.practicum.bliushtein.spr4.service.PostService;
 import ru.yandex.practicum.bliushtein.spr4.service.dto.PostSummary;
 
@@ -26,28 +20,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.*;
 import static ru.yandex.practicum.bliushtein.spr4.controller.configuration.TestData.*;
 
-@ExtendWith(SpringExtension.class)
-@ExtendWith(MockitoExtension.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = ControllerTestConfiguration.class)
+@WebMvcTest(FeedController.class)
 public class FeedControllerTest {
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Autowired
+    @MockitoBean
     private PostService postServiceMock;
 
     @Autowired
-    private FeedController controller;
     private MockMvc mockMvc;
     private MockHttpSession session;
 
     @BeforeEach
-    void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    void setUp() {
         session = new MockHttpSession();
-        reset(postServiceMock);
     }
 
     @Test
