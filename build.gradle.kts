@@ -13,6 +13,27 @@ java {
 	}
 }
 
+sourceSets {
+	create("intTest") {
+		compileClasspath += sourceSets.main.get().output
+		runtimeClasspath += sourceSets.main.get().output
+		resources {
+			srcDir(sourceSets.test.get().resources)
+		}
+	}
+}
+
+configurations["intTestImplementation"].extendsFrom(configurations.testImplementation.get())
+configurations["intTestRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
+
+tasks.register<Test>("intTest") {
+	description = "Runs integration tests."
+	group = "verification"
+
+	testClassesDirs = sourceSets["intTest"].output.classesDirs
+	classpath = sourceSets["intTest"].runtimeClasspath
+	shouldRunAfter("test")
+}
 repositories {
 	mavenCentral()
 }
@@ -37,4 +58,10 @@ springBoot {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	testLogging {
+		events("passed")
+	}
+}
+tasks.check {
+	dependsOn("intTest")
 }
