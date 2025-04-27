@@ -1,0 +1,18 @@
+<configuration scan="true" scanPeriod="120 seconds">
+    <appender name="DEFAULT_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/myapp.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover and up to 10MB per file -->
+            <fileNamePattern>myapp.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="DEFAULT_LOG" />
+    </root>
+</configuration>

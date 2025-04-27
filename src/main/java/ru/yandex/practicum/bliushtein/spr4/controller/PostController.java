@@ -1,5 +1,7 @@
 package ru.yandex.practicum.bliushtein.spr4.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @RequestMapping("/post")
 public class PostController {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(PostController.class);
     private final PostService service;
 
     public PostController(PostService service) {
@@ -25,6 +28,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String showPost(Model model, @PathVariable("id") UUID id) {
+        LOGGER.info("get post by id={}", id);
         PostDetails post = service.getPostDetails(id);
         model.addAttribute("post", post);
         return "post";
