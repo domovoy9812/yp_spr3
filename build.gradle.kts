@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 plugins {
 	java
 	id("org.springframework.boot") version "3.4.4"
@@ -64,4 +66,9 @@ tasks.withType<Test> {
 }
 tasks.check {
 	dependsOn("intTest")
+}
+tasks.named<BootRun>("bootRun") {
+	if (project.hasProperty("debug-port")) {
+		jvmArguments.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=" + project.property("debug-port"))
+	}
 }
